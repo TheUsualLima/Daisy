@@ -1,5 +1,6 @@
 package com.jason.daisy
 
+import android.graphics.Color
 import android.os.*
 import android.util.Log
 import android.view.MotionEvent
@@ -11,7 +12,9 @@ import com.jason.daisy.customviews.CustomConstraintLayout
 
 
 class MainActivity : AppCompatActivity() {
+
     override fun onCreate(savedInstanceState: Bundle?) {
+
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
@@ -23,6 +26,10 @@ class MainActivity : AppCompatActivity() {
             override fun handleMessage(msg: Message) {
                 when(msg.what) {
                     0 -> {
+                        theTextView.setTextColor(Color.GREEN)
+                    }
+
+                    1 -> {
                         val time = if (msg.obj.toString().length < 4) {
                             msg.obj.toString().padStart(4, '0')
                         } else {
@@ -31,13 +38,18 @@ class MainActivity : AppCompatActivity() {
                         val len = time.length
                         val str = "${time.substring(0, len - 3)}.${time.substring(len - 3, len - 1)}"
                         theTextView.text = str
+                        theTextView.setTextColor(Color.BLACK)
+                    }
+
+                    2 -> {
+                        theTextView.setTextColor(Color.RED)
                     }
                 }
             }
         }
 
         val button : Button = findViewById(R.id.button)
-        val toast = Toast.makeText(button.context, "I Love you", Toast.LENGTH_SHORT)
+        val toast = Toast.makeText(button.context, "I Love you, Luna", Toast.LENGTH_SHORT)
         button.setOnClickListener {
             toast.show()
         }
@@ -45,16 +57,25 @@ class MainActivity : AppCompatActivity() {
         val layout : CustomConstraintLayout = findViewById(R.id.mainLayout)
 
         layout.setOnTouchListener { v, event ->
+
             when (event?.action) {
                 MotionEvent.ACTION_DOWN -> {
+
                     Log.d("Touch", "ACTION DOWN")
                     if(timerActive) {
                         layout.performClick()
                         timerActive = false
                         timerActive
-                    } else true
+                    } else {
+                        val onMsg : Message = Message()
+                        onMsg.what = 0
+                        timerUIHandler.sendMessage(onMsg)
+                        true
+                    }
+
                 }
                 MotionEvent.ACTION_UP -> {
+
                     Log.d("Touch", "ACTION UP")
 
                     if (!timerActive) {
@@ -64,19 +85,25 @@ class MainActivity : AppCompatActivity() {
                         Thread(Runnable {
                             while (timerActive) {
                                 Thread.sleep(1)
-                                val m = Message()
-                                m.what = 0
-                                m.obj = (SystemClock.uptimeMillis() - timeStart)
+                                val updateMsg = Message()
+                                updateMsg.what = 1
+                                updateMsg.obj = (SystemClock.uptimeMillis() - timeStart)
 
-                                timerUIHandler.sendMessage(m)
+                                timerUIHandler.sendMessage(updateMsg)
                             }
+                            val offMsg = Message()
+                            offMsg.what = 2
+                            timerUIHandler.sendMessage(offMsg)
                         }).start()
                     }
                     v?.onTouchEvent(event) ?: true
+
                 }
                 else -> {
+
                     Log.d("Event", event.action.toString())
-                    false
+                    true
+
                 }
             }
         }
