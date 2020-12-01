@@ -1,20 +1,22 @@
 package com.jason.daisy
 
+import android.content.Intent
 import android.graphics.Color
 import android.os.*
 import android.util.Log
 import android.view.MotionEvent
+import android.view.View
 import android.widget.Button
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import com.jason.daisy.activities.ViewSolves
 import com.jason.daisy.customviews.CustomConstraintLayout
 
 
 class MainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
-
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
@@ -99,13 +101,13 @@ class MainActivity : AppCompatActivity() {
                     v?.onTouchEvent(event) ?: true
 
                 }
-                else -> {
-
-                    Log.d("Event", event.action.toString())
-                    true
-
-                }
+                else -> true
             }
         }
+    }
+
+    fun changeScreen(view: View) {
+        val viewSolvesIntent = Intent(this, ViewSolves::class.java).apply{}
+        startActivity(viewSolvesIntent)
     }
 }

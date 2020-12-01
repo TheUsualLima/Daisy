@@ -1,3 +1,7 @@
 <resources>
     <string name="app_name">Daisy</string>
+    <string name="timerInitText">0.00</string>
+    <string name="loveButtonName"><![CDATA[<3]]></string>
+    <string name="viewSolveButtonName">View Solves</string>
+    <string name="timerViewButton">View Timer</string>
 </resources>
