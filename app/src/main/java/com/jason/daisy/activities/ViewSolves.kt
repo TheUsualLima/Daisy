@@ -16,5 +16,8 @@ class ViewSolves : AppCompatActivity() {
     fun changeScreen(view: View) {
         val viewTimerIntent = Intent(this, MainActivity::class.java).apply{}
         startActivity(viewTimerIntent)
+
+//        val card = CardView()
+
     }
 }
