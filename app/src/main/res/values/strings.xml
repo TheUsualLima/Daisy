@@ -4,4 +4,6 @@
     <string name="loveButtonName"><![CDATA[<3]]></string>
     <string name="viewSolveButtonName">View Solves</string>
     <string name="timerViewButton">View Timer</string>
+    <string name="solve_text">TextView</string>
+    <string name="solve_placeholder_image">Solve placeholder image</string>
 </resources>

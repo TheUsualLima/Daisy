@@ -6,21 +6,20 @@ import android.os.*
 import android.util.Log
 import android.view.MotionEvent
 import android.view.View
-import android.widget.Button
-import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.jason.daisy.activities.ViewSolves
-import com.jason.daisy.customviews.CustomConstraintLayout
+import com.jason.daisy.databinding.ActivityMainBinding
 
 
 class MainActivity : AppCompatActivity() {
+    private lateinit var binding : ActivityMainBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
 
-        val theTextView : TextView = findViewById(R.id.textView)
+        binding = ActivityMainBinding.inflate(layoutInflater)
+        setContentView(binding.root)
 
         var timerActive = false //wrapped into a reference object to be modified when captured in a closure
 
@@ -28,7 +27,7 @@ class MainActivity : AppCompatActivity() {
             override fun handleMessage(msg: Message) {
                 when(msg.what) {
                     0 -> {
-                        theTextView.setTextColor(Color.GREEN)
+                        binding.textView.setTextColor(Color.GREEN)
                     }
 
                     1 -> {
@@ -39,33 +38,33 @@ class MainActivity : AppCompatActivity() {
                         }
                         val len = time.length
                         val str = "${time.substring(0, len - 3)}.${time.substring(len - 3, len - 1)}"
-                        theTextView.text = str
-                        theTextView.setTextColor(Color.BLACK)
+
+                        binding.textView.apply {
+                            text = str
+                            setTextColor(Color.BLACK)
+                        }
                     }
 
                     2 -> {
-                        theTextView.setTextColor(Color.RED)
+                        binding.textView .setTextColor(Color.RED)
                     }
                 }
             }
         }
 
-        val button : Button = findViewById(R.id.button)
-        val toast = Toast.makeText(button.context, "I Love you, Luna", Toast.LENGTH_SHORT)
-        button.setOnClickListener {
+        val toast = Toast.makeText(binding.button.context, "I Love you, Luna", Toast.LENGTH_SHORT)
+        binding.button.setOnClickListener {
             toast.show()
         }
 
-        val layout : CustomConstraintLayout = findViewById(R.id.mainLayout)
-
-        layout.setOnTouchListener { v, event ->
+        binding.mainLayout.setOnTouchListener { v, event ->
 
             when (event?.action) {
                 MotionEvent.ACTION_DOWN -> {
 
                     Log.d("Touch", "ACTION DOWN")
                     if(timerActive) {
-                        layout.performClick()
+                        binding.mainLayout.performClick()
                         timerActive = false
                         timerActive
                     } else {
@@ -81,7 +80,7 @@ class MainActivity : AppCompatActivity() {
                     Log.d("Touch", "ACTION UP")
 
                     if (!timerActive) {
-                        layout.performClick()
+                        binding.mainLayout.performClick()
                         val timeStart = SystemClock.uptimeMillis()
                         timerActive = true
                         Thread(Runnable {
