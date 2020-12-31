@@ -2,7 +2,6 @@ package com.jason.daisy
 
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import android.view.MotionEvent
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
@@ -32,12 +31,8 @@ class MainActivity : AppCompatActivity() {
 
         binding.mainLayout.setOnTouchListener { v, event ->
             when (event?.action) {
-                MotionEvent.ACTION_DOWN -> {
-                    Log.d("Touch", "ACTION DOWN")
-                    !viewModel.handleActionDown()
-                }
+                MotionEvent.ACTION_DOWN -> !viewModel.handleActionDown()
                 MotionEvent.ACTION_UP -> {
-                    Log.d("Touch", "ACTION UP")
                     binding.mainLayout.performClick()
                     !viewModel.handleActionUp()
                 }

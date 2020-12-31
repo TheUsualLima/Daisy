@@ -2,7 +2,6 @@ package com.jason.daisy.activities
 
 import android.content.Intent
 import android.os.Bundle
-import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.jason.daisy.MainActivity
@@ -18,9 +17,11 @@ class ViewSolves : AppCompatActivity() {
 
         binding.recyclerView.layoutManager = LinearLayoutManager(this)
         binding.recyclerView.adapter = SolvesAdapter()
+
+        binding.viewTimerButton.setOnClickListener { changeScreen() }
     }
 
-    fun changeScreen(view: View) {
+    private fun changeScreen() {
         val viewTimerIntent = Intent(this, MainActivity::class.java).apply{}
         startActivity(viewTimerIntent)
     }
