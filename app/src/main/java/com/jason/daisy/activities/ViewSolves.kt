@@ -1,7 +1,6 @@
 package com.jason.daisy.activities
 
 import android.content.Intent
-import android.graphics.Color
 import android.os.Bundle
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
@@ -18,9 +17,7 @@ class ViewSolves : AppCompatActivity() {
         setContentView(binding.root)
 
         binding.recyclerView.layoutManager = LinearLayoutManager(this)
-        binding.recyclerView.apply {
-            adapter = SolvesAdapter()
-        }
+        binding.recyclerView.adapter = SolvesAdapter()
     }
 
     fun changeScreen(view: View) {
