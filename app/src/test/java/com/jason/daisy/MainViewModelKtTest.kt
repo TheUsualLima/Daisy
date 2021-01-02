@@ -26,6 +26,11 @@ internal class MainViewModelKtTest {
     }
 
     @Test
+    fun timeStringOneMinuteOneSecond() {
+        assertEquals("1:01.23", millisToTimeString(61230), "Unexpected Result")
+    }
+
+    @Test
     fun timeString5MinutesHundredMilli() {
         assertEquals("5:00.10", millisToTimeString(300100L), "Unexpected Result")
     }

@@ -26,7 +26,7 @@ fun millisToTimeString(millis : Long) : String {
     s += when {
         minRes > 0 -> {
             if(s.isNotEmpty()) {
-                "${minRes.toString().padStart(1, '0')}:"
+                "${minRes.toString().padStart(2, '0')}:"
             } else {
                 "$minRes:"
             }
@@ -41,7 +41,7 @@ fun millisToTimeString(millis : Long) : String {
     s += when {
         secRes > 0 -> {
             if (s.isNotEmpty()) {
-                secRes.toString().padStart(1, '0')
+                secRes.toString().padStart(2, '0')
             } else {
                 secRes.toString()
             }
