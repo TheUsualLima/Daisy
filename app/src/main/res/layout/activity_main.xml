@@ -11,12 +11,12 @@
         android:id="@+id/text_view"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="340dp"
-        android:layout_marginEnd="168dp"
         android:gravity="center"
         android:text="@string/timerInitText"
         android:textSize="36sp"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <Button
@@ -33,7 +33,6 @@
         android:id="@+id/view_solves_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:onClick="changeScreen"
         android:text="@string/viewSolveButtonName"
         app:layout_constraintBottom_toTopOf="@+id/luna_button"
         app:layout_constraintEnd_toEndOf="parent"

@@ -5,21 +5,24 @@ import android.os.Bundle
 import android.view.MotionEvent
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.ViewModelProvider
 import com.jason.daisy.activities.ViewSolves
 import com.jason.daisy.databinding.ActivityMainBinding
 
 
 class MainActivity : AppCompatActivity() {
     private lateinit var binding : ActivityMainBinding
-    private val viewModel = MainViewModel()
+    private lateinit var vm : MainViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        viewModel.currentTime.observe(this, { binding.textView.text = it.toString() })
-        viewModel.timerColor.observe(this, { binding.textView.setTextColor(it) })
+        vm = ViewModelProvider(this, MainViewModelFactory()).get(MainViewModel::class.java)
+
+        vm.currentTime.observe(this, { binding.textView.text = it })
+        vm.timerColor.observe(this, { binding.textView.setTextColor(it) })
 
         binding.lunaButton.setOnClickListener {
             Toast.makeText(binding.lunaButton.context, "I Love you, Luna", Toast.LENGTH_SHORT).show()
@@ -31,10 +34,10 @@ class MainActivity : AppCompatActivity() {
 
         binding.mainLayout.setOnTouchListener { v, event ->
             when (event?.action) {
-                MotionEvent.ACTION_DOWN -> !viewModel.handleActionDown()
+                MotionEvent.ACTION_DOWN -> !vm.handleActionDown()
                 MotionEvent.ACTION_UP -> {
                     binding.mainLayout.performClick()
-                    !viewModel.handleActionUp()
+                    !vm.handleActionUp()
                 }
                 else -> true
             }
