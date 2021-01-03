@@ -1,10 +1,10 @@
 package com.jason.daisy.models
 
-import java.time.LocalDateTime
+import androidx.room.ColumnInfo
+import androidx.room.Entity
 
+@Entity(primaryKeys = ["time", "date"], tableName = "solves")
 data class Solve (
-    var time: String,
-    var dateOfSolve: LocalDateTime
-){
-
-}
+    val time: String,
+    @ColumnInfo(name = "date") val dateOfSolve: String
+)

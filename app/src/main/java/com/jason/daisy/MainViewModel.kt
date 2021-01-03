@@ -73,7 +73,7 @@ class MainViewModel : ViewModel() {
         timerColor.postValue(Color.MAGENTA)
         Thread(Runnable {
             while (timerActive) {
-                Thread.sleep(1)
+                Thread.sleep(10)
                 currentTime.postValue(millisToTimeString(timeStart.until(LocalTime.now(), ChronoUnit.MILLIS)))
             }
             timerColor.postValue(Color.BLACK)
