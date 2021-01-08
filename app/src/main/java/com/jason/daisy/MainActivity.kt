@@ -24,7 +24,6 @@ class MainActivity : AppCompatActivity() {
         vm.timerColor.observe(this, { vBinding.textView.setTextColor(it) })
 
         vBinding.lunaButton.setOnClickListener {
-            vm.clearDb()
             Toast.makeText(vBinding.lunaButton.context, "I Love you, Luna", Toast.LENGTH_SHORT).show()
         }
 

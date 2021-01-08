@@ -19,7 +19,8 @@ class ViewSolvesActivity : AppCompatActivity() {
         vm = ViewModelProvider(this, ViewSolvesViewModelFactory(application)).get(ViewSolvesViewModel::class.java)
 
         vBinding.recyclerView.layoutManager = LinearLayoutManager(this)
-        vBinding.recyclerView.adapter = SolvesAdapter()
+        vBinding.recyclerView.adapter = SolvesAdapter(vm.getSolves())
+        vBinding.recyclerView.setHasFixedSize(true)
 
         vBinding.viewTimerButton.setOnClickListener { changeScreen() }
     }
