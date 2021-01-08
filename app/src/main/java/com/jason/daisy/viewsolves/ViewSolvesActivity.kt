@@ -4,9 +4,11 @@ import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.jason.daisy.MainActivity
 import com.jason.daisy.databinding.ActivityViewSolvesBinding
+import kotlinx.coroutines.launch
 
 class ViewSolvesActivity : AppCompatActivity() {
     private lateinit var vBinding : ActivityViewSolvesBinding
@@ -19,7 +21,10 @@ class ViewSolvesActivity : AppCompatActivity() {
         vm = ViewModelProvider(this, ViewSolvesViewModelFactory(application)).get(ViewSolvesViewModel::class.java)
 
         vBinding.recyclerView.layoutManager = LinearLayoutManager(this)
-        vBinding.recyclerView.adapter = SolvesAdapter(vm.getSolves())
+        lifecycleScope.launch {
+            vBinding.recyclerView.adapter = SolvesAdapter(vm.getSolves())
+        }
+
         vBinding.recyclerView.setHasFixedSize(true)
 
         vBinding.viewTimerButton.setOnClickListener { changeScreen() }
