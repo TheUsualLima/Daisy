@@ -6,37 +6,37 @@ import android.view.MotionEvent
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
-import com.jason.daisy.activities.ViewSolves
 import com.jason.daisy.databinding.ActivityMainBinding
-
+import com.jason.daisy.viewsolves.ViewSolvesActivity
 
 class MainActivity : AppCompatActivity() {
-    private lateinit var binding : ActivityMainBinding
+    private lateinit var vBinding : ActivityMainBinding
     private lateinit var vm : MainViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        binding = ActivityMainBinding.inflate(layoutInflater)
-        setContentView(binding.root)
+        vBinding = ActivityMainBinding.inflate(layoutInflater)
+        setContentView(vBinding.root)
 
-        vm = ViewModelProvider(this, MainViewModelFactory()).get(MainViewModel::class.java)
+        vm = ViewModelProvider(this, MainViewModelFactory(application)).get(MainViewModel::class.java)
 
-        vm.currentTime.observe(this, { binding.textView.text = it })
-        vm.timerColor.observe(this, { binding.textView.setTextColor(it) })
+        vm.currentTime.observe(this, { vBinding.textView.text = it })
+        vm.timerColor.observe(this, { vBinding.textView.setTextColor(it) })
 
-        binding.lunaButton.setOnClickListener {
-            Toast.makeText(binding.lunaButton.context, "I Love you, Luna", Toast.LENGTH_SHORT).show()
+        vBinding.lunaButton.setOnClickListener {
+            vm.clearDb()
+            Toast.makeText(vBinding.lunaButton.context, "I Love you, Luna", Toast.LENGTH_SHORT).show()
         }
 
-        binding.viewSolvesButton.setOnClickListener {
+        vBinding.viewSolvesButton.setOnClickListener {
             changeScreen()
         }
 
-        binding.mainLayout.setOnTouchListener { v, event ->
+        vBinding.mainLayout.setOnTouchListener { _, event ->
             when (event?.action) {
                 MotionEvent.ACTION_DOWN -> !vm.handleActionDown()
                 MotionEvent.ACTION_UP -> {
-                    binding.mainLayout.performClick()
+                    vBinding.mainLayout.performClick()
                     !vm.handleActionUp()
                 }
                 else -> true
@@ -45,7 +45,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun changeScreen() {
-        val viewSolvesIntent = Intent(this, ViewSolves::class.java).apply{}
+        val viewSolvesIntent = Intent(this, ViewSolvesActivity::class.java).apply{}
         startActivity(viewSolvesIntent)
     }
 }

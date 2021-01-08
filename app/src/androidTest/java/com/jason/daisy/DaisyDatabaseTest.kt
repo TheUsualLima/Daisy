@@ -4,9 +4,9 @@ import android.util.Log
 import androidx.room.Room
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.platform.app.InstrumentationRegistry
-import com.jason.daisy.models.DaisyDatabase
-import com.jason.daisy.models.Solve
-import com.jason.daisy.models.SolveDao
+import com.jason.daisy.database.DaisyDatabase
+import com.jason.daisy.database.Solve
+import com.jason.daisy.database.SolveDao
 import junit.framework.Assert.assertTrue
 import org.junit.After
 import org.junit.Before

@@ -1,4 +1,4 @@
-package com.jason.daisy.models
+package com.jason.daisy.database
 
 import android.content.Context
 import androidx.room.Database

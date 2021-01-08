@@ -1,4 +1,4 @@
-package com.jason.daisy.models
+package com.jason.daisy.database
 
 import androidx.room.ColumnInfo
 import androidx.room.Entity

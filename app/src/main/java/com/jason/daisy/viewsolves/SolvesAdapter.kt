@@ -1,4 +1,4 @@
-package com.jason.daisy.activities
+package com.jason.daisy.viewsolves
 
 import android.view.LayoutInflater
 import android.view.View
