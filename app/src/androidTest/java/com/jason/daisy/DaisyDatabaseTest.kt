@@ -8,6 +8,7 @@ import com.jason.daisy.database.DaisyDatabase
 import com.jason.daisy.database.Solve
 import com.jason.daisy.database.SolveDao
 import junit.framework.Assert.assertTrue
+import kotlinx.coroutines.runBlocking
 import org.junit.After
 import org.junit.Before
 import org.junit.Test
@@ -43,7 +44,7 @@ class DaisyDatabaseTest {
 
     @Test
     @Throws(Exception::class)
-    fun insertAndGetSolve() {
+    fun insertAndGetSolve() = runBlocking {
         val solve = Solve("8.16", LocalDateTime.now().toString())
         val solve2 = Solve("13.37", LocalDateTime.now().toString())
         solveDao.insertAll(solve, solve2)
