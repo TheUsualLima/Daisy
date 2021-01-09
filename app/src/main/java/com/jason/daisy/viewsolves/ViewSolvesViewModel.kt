@@ -11,6 +11,14 @@ class ViewSolvesViewModel(application: Application) : ViewModel() {
     suspend fun getSolves(): List<Solve> {
         var data = listOf<Solve>()
         data = db.solveDao.getAll()
-        return data
+        return data.reversed()
+    }
+
+    suspend fun deleteAll() {
+        db.solveDao.deleteAll()
+    }
+
+    suspend fun delete(s: Solve) {
+        db.solveDao.delete(s)
     }
 }

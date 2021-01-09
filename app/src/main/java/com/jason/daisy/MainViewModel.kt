@@ -2,10 +2,10 @@ package com.jason.daisy
 
 import android.app.Application
 import android.graphics.Color
-import android.util.Log
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
+import com.jason.daisy.common.msToTimeString
 import com.jason.daisy.database.DaisyDatabase
 import com.jason.daisy.database.Solve
 import kotlinx.coroutines.Dispatchers
@@ -15,28 +15,6 @@ import kotlinx.coroutines.withContext
 import java.time.LocalDateTime
 import java.time.LocalTime
 import java.time.temporal.ChronoUnit
-
-fun msToTimeString(millis : Long) : String {
-    val s : String
-    val hours = millis / 1000 / 60 / 60
-    val minutes = millis / 1000 / 60 % 60
-    val seconds = millis / 1000 % 60
-    val milliseconds = millis % 1000 / 10
-
-    s = when {
-        hours > 0 -> "$hours:" +
-                "${minutes.toString().padStart(2, '0')}:" +
-                "${seconds.toString().padStart(2, '0')}." +
-                milliseconds.toString().padStart(2, '0')
-        minutes > 0 -> "$minutes:" +
-                "${seconds.toString().padStart(2, '0')}." +
-                milliseconds.toString().padStart(2, '0')
-        else -> "$seconds." +
-                milliseconds.toString().padStart(2, '0')
-    }
-
-    return s
-}
 
 class MainViewModel(application: Application) : AndroidViewModel(application) {
 
@@ -81,24 +59,17 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
         return false
     }
 
-    private fun showTimes() = viewModelScope.launch {
-        val solves = db.solveDao.getAll()
-        for((i, s) in solves.withIndex()) {
-            Log.d("$i", s.toString())
-        }
-    }
-
     private fun saveTime() = viewModelScope.launch {
-        db.solveDao.insertAll(Solve(msToTimeString(timeStart.until(timeEnd, ChronoUnit.MILLIS)), LocalDateTime.now().toString()))
+        db.solveDao.insertAll(Solve(timeStart.until(timeEnd, ChronoUnit.MILLIS).msToTimeString(), LocalDateTime.now().toString()))
     }
 
     private fun timerJob() = viewModelScope.launch {
         withContext(Dispatchers.Default) {
             while (timerActive) {
-                delay(1L)
-                currentTime.postValue(msToTimeString(timeStart.until(LocalTime.now(), ChronoUnit.MILLIS)))
+                delay(10L)
+                currentTime.postValue(timeStart.until(LocalTime.now(), ChronoUnit.MILLIS).msToTimeString())
             }
-            currentTime.postValue(msToTimeString(timeStart.until(timeEnd, ChronoUnit.MILLIS)))
+            currentTime.postValue(timeStart.until(timeEnd, ChronoUnit.MILLIS).msToTimeString())
             saveTime()
             timerColor.postValue(Color.BLACK)
         }

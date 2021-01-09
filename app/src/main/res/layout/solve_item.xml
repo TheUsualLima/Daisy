@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_margin="4dp">
@@ -33,6 +34,14 @@
             android:layout_below="@id/text_view_1"
             android:layout_toEndOf="@id/image_view"
             android:text="Line 2" />
+
+        <ImageButton
+            android:id="@+id/delete_solve_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:contentDescription="Delete Solve Icon"
+            android:layout_alignParentEnd="true"
+            app:srcCompat="@drawable/ic_delete" />
 
 
     </RelativeLayout>
