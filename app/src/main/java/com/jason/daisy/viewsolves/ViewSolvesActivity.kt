@@ -32,7 +32,7 @@ class ViewSolvesActivity : AppCompatActivity(), SolvesAdapterListener {
         vBinding.recyclerView.setHasFixedSize(true)
 
         vBinding.viewTimerButton.setOnClickListener { changeScreen() }
-        vBinding.deleteAllButton.setOnClickListener { showDialog() }
+        vBinding.deleteAllButton.setOnClickListener { showDeleteAllDialog() }
 
         vm.data.observe(this,
                 {
@@ -52,18 +52,17 @@ class ViewSolvesActivity : AppCompatActivity(), SolvesAdapterListener {
     }
 
     override fun deleteDialog(s: Solve) = lifecycleScope.launch {
-        vm.delete(s)
-        populateAdapter()
+        showDeleteDialog(s)
     }
 
-    private fun showDialog() {
+    private fun showDeleteAllDialog() {
         lateinit var dialog: AlertDialog
         val builder = AlertDialog.Builder(this)
         builder.setTitle("Delete All Solves")
         builder.setMessage("This action will delete all solves. Continue?")
         val dialogClickListener = DialogInterface.OnClickListener { _, which ->
             when (which) {
-                DialogInterface.BUTTON_POSITIVE -> lifecycleScope.launch {
+                DialogInterface.BUTTON_POSITIVE -> {
                     vm.deleteAll()
                     populateAdapter()
                 }
@@ -77,14 +76,17 @@ class ViewSolvesActivity : AppCompatActivity(), SolvesAdapterListener {
         dialog.show()
     }
 
-    private fun showDialog(currentItem: Solve) {
+    private fun showDeleteDialog(currentItem: Solve) {
         lateinit var dialog: AlertDialog
         val builder = AlertDialog.Builder(this)
         builder.setTitle("Delete Solve")
         builder.setMessage("Are you sure you want to delete this solve?")
         val dialogClickListener = DialogInterface.OnClickListener { _, which ->
             when (which) {
-                DialogInterface.BUTTON_POSITIVE -> vm.delete(currentItem)
+                DialogInterface.BUTTON_POSITIVE -> {
+                    vm.delete(currentItem)
+                    populateAdapter()
+                }
                 else -> Log.d("DELETESOLVE", "CANCELLED")
             }
         }

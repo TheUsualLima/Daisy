@@ -31,5 +31,4 @@ class SolvesAdapter(private val listener: SolvesAdapterListener) : ListAdapter<S
             }
         }
     }
-
 }
