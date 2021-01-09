@@ -4,7 +4,6 @@ import com.jason.daisy.database.Solve
 import kotlinx.coroutines.Job
 
 interface SolvesAdapterListener {
-    fun delete(s : Solve): Job
-    fun updateAdapter()
-    fun getSolves(): List<Solve>
+    fun deleteDialog(s : Solve): Job
+    fun populateAdapter()
 }

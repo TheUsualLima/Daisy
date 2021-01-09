@@ -1,24 +1,26 @@
 package com.jason.daisy.viewsolves
 
 import android.app.Application
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.jason.daisy.database.DaisyDatabase
 import com.jason.daisy.database.Solve
+import kotlinx.coroutines.launch
 
 class ViewSolvesViewModel(application: Application) : ViewModel() {
     private val db = DaisyDatabase.getInstance(application.applicationContext)
+    val data : MutableLiveData<List<Solve>> = MutableLiveData()
 
-    suspend fun getSolves(): List<Solve> {
-        var data = listOf<Solve>()
-        data = db.solveDao.getAll()
-        return data.reversed()
+    fun updateSolves() {
+        viewModelScope.launch { data.postValue(db.solveDao.getAll().reversed()) }
     }
 
-    suspend fun deleteAll() {
-        db.solveDao.deleteAll()
+    fun deleteAll() {
+        viewModelScope.launch { db.solveDao.deleteAll() }
     }
 
-    suspend fun delete(s: Solve) {
-        db.solveDao.delete(s)
+    fun delete(s: Solve) {
+        viewModelScope.launch { db.solveDao.delete(s) }
     }
 }

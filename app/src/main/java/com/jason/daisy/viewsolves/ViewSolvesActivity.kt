@@ -13,11 +13,11 @@ import com.jason.daisy.MainActivity
 import com.jason.daisy.database.Solve
 import com.jason.daisy.databinding.ActivityViewSolvesBinding
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.runBlocking
 
 class ViewSolvesActivity : AppCompatActivity(), SolvesAdapterListener {
-    private lateinit var vBinding : ActivityViewSolvesBinding
-    private lateinit var vm : ViewSolvesViewModel
+    private lateinit var vBinding: ActivityViewSolvesBinding
+    private lateinit var vm: ViewSolvesViewModel
+    private lateinit var adapter: SolvesAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -26,36 +26,34 @@ class ViewSolvesActivity : AppCompatActivity(), SolvesAdapterListener {
         vm = ViewModelProvider(this, ViewSolvesViewModelFactory(application)).get(ViewSolvesViewModel::class.java)
 
         vBinding.recyclerView.layoutManager = LinearLayoutManager(this)
-        val t = this
-        lifecycleScope.launch {
-            vBinding.recyclerView.adapter = SolvesAdapter(t)
-        }
-
+        adapter = SolvesAdapter(this)
+        vBinding.recyclerView.adapter = adapter
+        populateAdapter()
         vBinding.recyclerView.setHasFixedSize(true)
 
         vBinding.viewTimerButton.setOnClickListener { changeScreen() }
         vBinding.deleteAllButton.setOnClickListener { showDialog() }
+
+        vm.data.observe(this,
+                {
+                    adapter.submitList(it)
+                    adapter.notifyDataSetChanged()
+                }
+        )
     }
 
     private fun changeScreen() {
-        val viewTimerIntent = Intent(this, MainActivity::class.java).apply{}
+        val viewTimerIntent = Intent(this, MainActivity::class.java).apply {}
         startActivity(viewTimerIntent)
     }
 
-    override fun getSolves(): List<Solve> = runBlocking {
-            vm.getSolves()
-        }
-
-    override fun delete(s: Solve) = lifecycleScope.launch {
-        vm.delete(s)
-        updateAdapter()
+    override fun populateAdapter() {
+        vm.updateSolves()
     }
 
-    override fun updateAdapter() {
-        val t = this
-        lifecycleScope.launch {
-            vBinding.recyclerView.adapter = SolvesAdapter(t)
-        }
+    override fun deleteDialog(s: Solve) = lifecycleScope.launch {
+        vm.delete(s)
+        populateAdapter()
     }
 
     private fun showDialog() {
@@ -64,12 +62,30 @@ class ViewSolvesActivity : AppCompatActivity(), SolvesAdapterListener {
         builder.setTitle("Delete All Solves")
         builder.setMessage("This action will delete all solves. Continue?")
         val dialogClickListener = DialogInterface.OnClickListener { _, which ->
-            when(which) {
+            when (which) {
                 DialogInterface.BUTTON_POSITIVE -> lifecycleScope.launch {
                     vm.deleteAll()
-                    updateAdapter()
+                    populateAdapter()
                 }
                 else -> Log.d("DELETEALLSOLVES", "CANCELLED")
+            }
+        }
+        builder.setPositiveButton("YES", dialogClickListener)
+        builder.setNegativeButton("NO", dialogClickListener)
+
+        dialog = builder.create()
+        dialog.show()
+    }
+
+    private fun showDialog(currentItem: Solve) {
+        lateinit var dialog: AlertDialog
+        val builder = AlertDialog.Builder(this)
+        builder.setTitle("Delete Solve")
+        builder.setMessage("Are you sure you want to delete this solve?")
+        val dialogClickListener = DialogInterface.OnClickListener { _, which ->
+            when (which) {
+                DialogInterface.BUTTON_POSITIVE -> vm.delete(currentItem)
+                else -> Log.d("DELETESOLVE", "CANCELLED")
             }
         }
         builder.setPositiveButton("YES", dialogClickListener)
