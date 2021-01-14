@@ -6,4 +6,5 @@
     <string name="timerViewButton">View Timer</string>
     <string name="solve_text">TextView</string>
     <string name="solve_placeholder_image">Solve placeholder image</string>
+    <string name="scrambleDefault">B R2 F\' B2 L B D L\' B2 U L F2 D R2 B2 D2 L F\' L2 U R2 D2 R\'</string>
 </resources>

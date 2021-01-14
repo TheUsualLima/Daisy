@@ -24,6 +24,7 @@ class SolvesAdapter(private val listener: SolvesAdapterListener) : ListAdapter<S
                 textView1.text = currentItem.time
                 val s = "Date: ${currentItem.dateOfSolve.substring(0..9)} Time: ${currentItem.dateOfSolve.substring(11 until currentItem.dateOfSolve.length - 1)}"
                 textView2.text = s
+                scrambleTextView.text = currentItem.scramble
                 deleteSolveButton.setOnClickListener {
                     //Interface to call a function in the activity from adapter
                     listener.deleteDialog(currentItem)

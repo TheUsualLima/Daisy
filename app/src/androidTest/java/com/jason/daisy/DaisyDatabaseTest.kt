@@ -45,8 +45,8 @@ class DaisyDatabaseTest {
     @Test
     @Throws(Exception::class)
     fun insertAndGetSolve() = runBlocking {
-        val solve = Solve("8.16", LocalDateTime.now().toString())
-        val solve2 = Solve("13.37", LocalDateTime.now().toString())
+        val solve = Solve("8.16", LocalDateTime.now().toString(), "")
+        val solve2 = Solve("13.37", LocalDateTime.now().toString(), "")
         solveDao.insertAll(solve, solve2)
         val allSolves = solveDao.getAll()
         val s = allSolves.contains(solve)

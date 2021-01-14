@@ -12,10 +12,6 @@ class CustomConstraintLayout : ConstraintLayout {
     constructor(context: Context, attrs: AttributeSet?,
                 @AttrRes defStyleAttr: Int) : super(context, attrs, defStyleAttr)
 
-    companion object {
-        var toastCount : Int = 0
-    }
-
     // Because we call this from onTouchEvent, this code will be executed for both
     // normal touch events and for when the system calls this using Accessibility
     override fun performClick(): Boolean {

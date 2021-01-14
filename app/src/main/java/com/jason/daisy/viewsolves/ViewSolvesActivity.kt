@@ -9,9 +9,9 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.jason.daisy.MainActivity
 import com.jason.daisy.database.Solve
 import com.jason.daisy.databinding.ActivityViewSolvesBinding
+import com.jason.daisy.scrambletimer.ScrambleTimerActivity
 import kotlinx.coroutines.launch
 
 class ViewSolvesActivity : AppCompatActivity(), SolvesAdapterListener {
@@ -43,7 +43,7 @@ class ViewSolvesActivity : AppCompatActivity(), SolvesAdapterListener {
     }
 
     private fun changeScreen() {
-        val viewTimerIntent = Intent(this, MainActivity::class.java).apply {}
+        val viewTimerIntent = Intent(this, ScrambleTimerActivity::class.java).apply {}
         startActivity(viewTimerIntent)
     }
 
@@ -62,10 +62,7 @@ class ViewSolvesActivity : AppCompatActivity(), SolvesAdapterListener {
         builder.setMessage("This action will delete all solves. Continue?")
         val dialogClickListener = DialogInterface.OnClickListener { _, which ->
             when (which) {
-                DialogInterface.BUTTON_POSITIVE -> {
-                    vm.deleteAll()
-                    populateAdapter()
-                }
+                DialogInterface.BUTTON_POSITIVE -> { vm.deleteAll() }
                 else -> Log.d("DELETEALLSOLVES", "CANCELLED")
             }
         }
@@ -83,10 +80,7 @@ class ViewSolvesActivity : AppCompatActivity(), SolvesAdapterListener {
         builder.setMessage("Are you sure you want to delete this solve?")
         val dialogClickListener = DialogInterface.OnClickListener { _, which ->
             when (which) {
-                DialogInterface.BUTTON_POSITIVE -> {
-                    vm.delete(currentItem)
-                    populateAdapter()
-                }
+                DialogInterface.BUTTON_POSITIVE -> { vm.delete(currentItem) }
                 else -> Log.d("DELETESOLVE", "CANCELLED")
             }
         }

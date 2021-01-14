@@ -65,5 +65,8 @@ dependencies {
     implementation "androidx.lifecycle:lifecycle-runtime-ktx:2.2.0"
 
     //TNoodle
-    //implementation "org.webcubeassociation.tnoodle:lib-scrambles:0.18.0"
+    implementation 'org.worldcubeassociation.tnoodle:lib-scrambles:0.18.0'
+//    implementation 'org.worldcubeassociation.tnoodle:lib-svglite:0.18.0'
+//    implementation 'org.worldcubeassociation.tnoodle:scrambler-min2phase:0.18.0'
+//    implementation 'org.worldcubeassociation.tnoodle:scrambler-threephase:0.18.0'
 }

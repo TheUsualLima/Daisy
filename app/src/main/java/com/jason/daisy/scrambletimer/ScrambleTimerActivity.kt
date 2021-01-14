@@ -1,4 +1,4 @@
-package com.jason.daisy
+package com.jason.daisy.scrambletimer
 
 import android.content.Intent
 import android.os.Bundle
@@ -9,19 +9,22 @@ import androidx.lifecycle.ViewModelProvider
 import com.jason.daisy.databinding.ActivityMainBinding
 import com.jason.daisy.viewsolves.ViewSolvesActivity
 
-class MainActivity : AppCompatActivity() {
+class ScrambleTimerActivity : AppCompatActivity() {
     private lateinit var vBinding : ActivityMainBinding
-    private lateinit var vm : MainViewModel
+    private lateinit var vm : ScrambleTimerViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         vBinding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(vBinding.root)
 
-        vm = ViewModelProvider(this, MainViewModelFactory(application)).get(MainViewModel::class.java)
+        vm = ViewModelProvider(this, ScrambleTimerViewModelFactory(application)).get(
+            ScrambleTimerViewModel::class.java)
 
-        vm.currentTime.observe(this, { vBinding.textView.text = it })
-        vm.timerColor.observe(this, { vBinding.textView.setTextColor(it) })
+        vm.currentTime.observe(this, { vBinding.timerTextView.text = it })
+        vm.timerColor.observe(this, { vBinding.timerTextView.setTextColor(it) })
+        vm.scramble.observe(this, { vBinding.scrambleTextView.text = it })
+        vm.updateScramble()
 
         vBinding.lunaButton.setOnClickListener {
             Toast.makeText(vBinding.lunaButton.context, "I Love you, Luna", Toast.LENGTH_SHORT).show()

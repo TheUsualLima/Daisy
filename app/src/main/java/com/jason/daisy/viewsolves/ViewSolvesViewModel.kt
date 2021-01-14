@@ -6,6 +6,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.jason.daisy.database.DaisyDatabase
 import com.jason.daisy.database.Solve
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
 class ViewSolvesViewModel(application: Application) : ViewModel() {
@@ -13,14 +14,20 @@ class ViewSolvesViewModel(application: Application) : ViewModel() {
     val data : MutableLiveData<List<Solve>> = MutableLiveData()
 
     fun updateSolves() {
-        viewModelScope.launch { data.postValue(db.solveDao.getAll().reversed()) }
+        viewModelScope.launch(Dispatchers.IO) { data.postValue(db.solveDao.getAll().reversed()) }
     }
 
     fun deleteAll() {
-        viewModelScope.launch { db.solveDao.deleteAll() }
+        viewModelScope.launch(Dispatchers.IO) {
+            db.solveDao.deleteAll()
+            updateSolves()
+        }
     }
 
     fun delete(s: Solve) {
-        viewModelScope.launch { db.solveDao.delete(s) }
+        viewModelScope.launch(Dispatchers.IO) {
+            db.solveDao.delete(s)
+            updateSolves()
+        }
     }
 }

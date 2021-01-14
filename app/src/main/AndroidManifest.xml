@@ -12,7 +12,7 @@
         <activity android:name=".viewsolves.ViewSolvesActivity"
             android:launchMode="singleTask"
             />
-        <activity android:name=".MainActivity"
+        <activity android:name=".scrambletimer.ScrambleTimerActivity"
             android:launchMode="singleTask">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

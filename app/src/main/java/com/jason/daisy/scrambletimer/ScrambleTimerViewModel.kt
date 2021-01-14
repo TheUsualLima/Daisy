@@ -1,4 +1,4 @@
-package com.jason.daisy
+package com.jason.daisy.scrambletimer
 
 import android.app.Application
 import android.graphics.Color
@@ -11,19 +11,20 @@ import com.jason.daisy.database.Solve
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
+import org.worldcubeassociation.tnoodle.puzzle.CubePuzzle
 import java.time.LocalDateTime
 import java.time.LocalTime
 import java.time.temporal.ChronoUnit
 
-class MainViewModel(application: Application) : AndroidViewModel(application) {
-
+class ScrambleTimerViewModel(application: Application) : AndroidViewModel(application) {
+    private var puzzle : CubePuzzle = GetPuzzleUseCase().execute(GetDefaultPuzzleTypeUseCase().execute())
     private var timerActive = false
     private var timeStart : LocalTime = LocalTime.now()
     private var timeEnd : LocalTime = LocalTime.now()
     private val db = DaisyDatabase.getInstance(application.applicationContext)
-    var currentTime : MutableLiveData<String> = MutableLiveData()
-    var timerColor : MutableLiveData<Int> = MutableLiveData()
+    val currentTime : MutableLiveData<String> = MutableLiveData()
+    val timerColor : MutableLiveData<Int> = MutableLiveData()
+    val scramble : MutableLiveData<String> = MutableLiveData()
 
     fun handleActionUp() : Boolean {
         if(!timerActive) startTimer()
@@ -39,9 +40,10 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
         }
     }
 
-    fun clearDb() = viewModelScope.launch {
-        db.solveDao.deleteAll()
+    fun updateScramble() = viewModelScope.launch(Dispatchers.Default) {
+        scramble.postValue(puzzle.generateScramble())
     }
+
 
     private fun startTimer() {
         timeStart = LocalTime.now()
@@ -53,25 +55,24 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
     private fun stopIfStarted() : Boolean {
         if(timerActive) {
             timeEnd = LocalTime.now()
+            saveTime()
             timerActive = false
+            updateScramble()
             return true
         }
         return false
     }
 
-    private fun saveTime() = viewModelScope.launch {
-        db.solveDao.insertAll(Solve(timeStart.until(timeEnd, ChronoUnit.MILLIS).msToTimeString(), LocalDateTime.now().toString()))
+    private fun saveTime() = viewModelScope.launch(Dispatchers.IO) {
+        db.solveDao.insertAll(Solve(timeStart.until(timeEnd, ChronoUnit.MILLIS).msToTimeString(), LocalDateTime.now().toString(), scramble.value ?: ""))
     }
 
-    private fun timerJob() = viewModelScope.launch {
-        withContext(Dispatchers.Default) {
-            while (timerActive) {
-                delay(10L)
-                currentTime.postValue(timeStart.until(LocalTime.now(), ChronoUnit.MILLIS).msToTimeString())
-            }
-            currentTime.postValue(timeStart.until(timeEnd, ChronoUnit.MILLIS).msToTimeString())
-            saveTime()
-            timerColor.postValue(Color.BLACK)
+    private fun timerJob() = viewModelScope.launch(Dispatchers.Default) {
+        while (timerActive) {
+            delay(10L)
+            currentTime.postValue(timeStart.until(LocalTime.now(), ChronoUnit.MILLIS).msToTimeString())
         }
+        currentTime.postValue(timeStart.until(timeEnd, ChronoUnit.MILLIS).msToTimeString())
+        timerColor.postValue(Color.BLACK)
     }
 }

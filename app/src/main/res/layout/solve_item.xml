@@ -28,10 +28,19 @@
             android:textStyle="bold" />
 
         <TextView
+            android:id="@+id/scramble_text_view"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_toEndOf="@id/text_view_1"
+            android:layout_toStartOf="@id/delete_solve_button"
+            android:paddingStart="10sp"
+            android:text="R2 D2 R2 D2 R2 D2 R2 D2 R2 D2 R2 D2 R2 D2 R2 D2 R2 D2"/>
+
+        <TextView
             android:id="@+id/text_view_2"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@id/text_view_1"
+            android:layout_below="@id/scramble_text_view"
             android:layout_toEndOf="@id/image_view"
             android:text="Line 2" />
 
