@@ -27,28 +27,31 @@ class ScrambleTimerViewModel(application: Application) : AndroidViewModel(applic
     val timerColor : MutableLiveData<Int> = MutableLiveData()
     val scramble : MutableLiveData<String> = MutableLiveData()
 
+    init {
+        updateScramble()
+    }
+
     fun handleActionUp() : Boolean {
         if(!timerActive) startTimer()
         return true
     }
 
     fun handleActionDown() : Boolean {
-        return if (stopIfStarted()) {
-            true
-        } else {
+        return if (stopIfStarted()) true
+        else {
             timerColor.postValue(Color.GREEN)
             false
         }
     }
 
-    fun updateScramble() = viewModelScope.launch(Dispatchers.Default) {
+    private fun updateScramble() = viewModelScope.launch(Dispatchers.Default) {
         scrambles.remove(scramble.value)
-        updateScrambles()
+        updateScrambleList()
         if(scrambles.isEmpty()) scramble.postValue(puzzle.generateScramble())
         else scramble.postValue(scrambles[0])
     }
 
-    private fun updateScrambles() = viewModelScope.launch(Dispatchers.Default) {
+    private fun updateScrambleList() = viewModelScope.launch(Dispatchers.Default) {
         while(scrambles.size < 10) {
             scrambles.add(puzzle.generateScramble())
         }

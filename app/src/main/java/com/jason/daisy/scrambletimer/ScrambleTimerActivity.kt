@@ -24,7 +24,6 @@ class ScrambleTimerActivity : AppCompatActivity() {
         vm.currentTime.observe(this, { vBinding.timerTextView.text = it })
         vm.timerColor.observe(this, { vBinding.timerTextView.setTextColor(it) })
         vm.scramble.observe(this, { vBinding.scrambleTextView.text = it })
-        vm.updateScramble()
 
         vBinding.lunaButton.setOnClickListener {
             Toast.makeText(vBinding.lunaButton.context, "I Love you, Luna", Toast.LENGTH_SHORT).show()
