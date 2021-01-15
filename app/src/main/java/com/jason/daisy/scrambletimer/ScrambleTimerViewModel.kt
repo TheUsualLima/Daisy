@@ -22,6 +22,7 @@ class ScrambleTimerViewModel(application: Application) : AndroidViewModel(applic
     private var timeStart : LocalTime = LocalTime.now()
     private var timeEnd : LocalTime = LocalTime.now()
     private val db = DaisyDatabase.getInstance(application.applicationContext)
+    private val scrambles = mutableListOf<String>()
     val currentTime : MutableLiveData<String> = MutableLiveData()
     val timerColor : MutableLiveData<Int> = MutableLiveData()
     val scramble : MutableLiveData<String> = MutableLiveData()
@@ -41,9 +42,17 @@ class ScrambleTimerViewModel(application: Application) : AndroidViewModel(applic
     }
 
     fun updateScramble() = viewModelScope.launch(Dispatchers.Default) {
-        scramble.postValue(puzzle.generateScramble())
+        scrambles.remove(scramble.value)
+        updateScrambles()
+        if(scrambles.isEmpty()) scramble.postValue(puzzle.generateScramble())
+        else scramble.postValue(scrambles[0])
     }
 
+    private fun updateScrambles() = viewModelScope.launch(Dispatchers.Default) {
+        while(scrambles.size < 10) {
+            scrambles.add(puzzle.generateScramble())
+        }
+    }
 
     private fun startTimer() {
         timeStart = LocalTime.now()
