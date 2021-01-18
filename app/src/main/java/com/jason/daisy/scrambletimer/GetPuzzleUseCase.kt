@@ -1,16 +1,16 @@
 package com.jason.daisy.scrambletimer
 
-import org.worldcubeassociation.tnoodle.puzzle.ThreeByThreeCubePuzzle
+import org.worldcubeassociation.tnoodle.puzzle.*
 
 class GetPuzzleUseCase {
-    fun execute(c : CubeType) = when(c) {
-            CubeType.TwoByTwo -> ThreeByThreeCubePuzzle()
-            CubeType.ThreeByThree -> ThreeByThreeCubePuzzle()
-            CubeType.FourByFour -> ThreeByThreeCubePuzzle()
-            CubeType.Pyraminx -> ThreeByThreeCubePuzzle()
-            CubeType.Clock -> ThreeByThreeCubePuzzle()
-            CubeType.SquareOne -> ThreeByThreeCubePuzzle()
-            CubeType.Skewb -> ThreeByThreeCubePuzzle()
-            CubeType.Megaminx -> ThreeByThreeCubePuzzle()
+    fun execute(c : PuzzleType) = when(c) {
+            PuzzleType.TwoByTwo -> TwoByTwoCubePuzzle()
+            PuzzleType.ThreeByThree -> ThreeByThreeCubePuzzle()
+            PuzzleType.FourByFour -> FourByFourCubePuzzle()
+            PuzzleType.Pyraminx -> PyraminxPuzzle()
+            PuzzleType.Clock -> ClockPuzzle()
+            PuzzleType.SquareOne -> SquareOnePuzzle()
+            PuzzleType.Skewb -> SkewbPuzzle()
+            PuzzleType.Megaminx -> MegaminxPuzzle()
     }
 }

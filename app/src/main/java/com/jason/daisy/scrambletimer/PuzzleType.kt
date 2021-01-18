@@ -1,12 +1,12 @@
 package com.jason.daisy.scrambletimer
 
-sealed class CubeType(val cubeName : String) {
-    object TwoByTwo : CubeType("Two by Two")
-    object ThreeByThree : CubeType("Three by Three")
-    object FourByFour : CubeType("Four by Four")
-    object Pyraminx : CubeType("Pyraminx")
-    object Clock : CubeType("Clock")
-    object SquareOne : CubeType("Square One")
-    object Skewb : CubeType("Skewb")
-    object Megaminx : CubeType("Megaminx")
+sealed class PuzzleType(val cubeName : String) {
+    object TwoByTwo : PuzzleType("Two by Two")
+    object ThreeByThree : PuzzleType("Three by Three")
+    object FourByFour : PuzzleType("Four by Four")
+    object Pyraminx : PuzzleType("Pyraminx")
+    object Clock : PuzzleType("Clock")
+    object SquareOne : PuzzleType("Square One")
+    object Skewb : PuzzleType("Skewb")
+    object Megaminx : PuzzleType("Megaminx")
 }
