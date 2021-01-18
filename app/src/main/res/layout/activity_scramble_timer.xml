@@ -55,5 +55,14 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.12" />
 
+    <Spinner
+        android:id="@+id/puzzle_spinner"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:entries="@android:array/emailAddressTypes"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/scramble_text_view" />
+
 
 </com.jason.daisy.customviews.CustomConstraintLayout>
