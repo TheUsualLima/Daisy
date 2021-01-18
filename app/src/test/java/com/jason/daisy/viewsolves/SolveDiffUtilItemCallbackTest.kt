@@ -8,8 +8,8 @@ internal class SolveDiffUtilItemCallbackTest {
 
     @Test
     fun areItemsTheSame() {
-        val s1 = Solve("3:02.22", "2021-01-09T15:13:55.97")
-        val s2 = Solve("3:02.22", "2021-01-09T15:13:55.97")
+        val s1 = Solve("3:02.22", "2021-01-09T15:13:55.97", "")
+        val s2 = Solve("3:02.22", "2021-01-09T15:13:55.97", "")
         Assertions.assertTrue(SolveDiffUtilItemCallback.areItemsTheSame(s1, s2))
     }
 
