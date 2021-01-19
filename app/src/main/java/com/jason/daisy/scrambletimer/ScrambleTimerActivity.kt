@@ -22,16 +22,21 @@ class ScrambleTimerActivity : AppCompatActivity() {
         vBinding = ActivityScrambleTimerBinding.inflate(layoutInflater)
         setContentView(vBinding.root)
 
+        //Elements to hide when solving
         hiddenElements = listOf(vBinding.lunaButton,
                 vBinding.viewSolvesButton,
                 vBinding.puzzleSpinner,
                 vBinding.scrambleTextView
         )
 
+        //Get ViewModel
         vm = ViewModelProvider(this, ScrambleTimerViewModelFactory(application)).get(
             ScrambleTimerViewModel::class.java)
 
-        vBinding.puzzleSpinner.adapter = ArrayAdapter<String>(this, R.layout.support_simple_spinner_dropdown_item, arrayListOf("HI", "HELLO", "Hi"))
+        //Update Spinner with puzzle types
+        val puzzleTypeStringArray = arrayListOf<String>()
+        PuzzleType.values().forEach { puzzleTypeStringArray.add(it.puzzleName) }
+        vBinding.puzzleSpinner.adapter = ArrayAdapter<String>(this, R.layout.support_simple_spinner_dropdown_item, puzzleTypeStringArray)
 
         vm.currentTime.observe(this, { vBinding.timerTextView.text = it })
         vm.timerColor.observe(this, { vBinding.timerTextView.setTextColor(it) })
