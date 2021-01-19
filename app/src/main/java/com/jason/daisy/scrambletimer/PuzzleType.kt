@@ -1,8 +1,8 @@
 package com.jason.daisy.scrambletimer
 
 enum class PuzzleType(val puzzleName: String) {
-    TwoByTwo("Two by Two"),
     ThreeByThree ("Three by Three"),
+    TwoByTwo("Two by Two"),
     FourByFour ("Four by Four"),
     Pyraminx ("Pyraminx"),
     Clock ("Clock"),
@@ -12,5 +12,19 @@ enum class PuzzleType(val puzzleName: String) {
 
     override fun toString(): String {
         return puzzleName
+    }
+
+    companion object {
+        fun getPuzzleType(str: String) = when(str) {
+            ThreeByThree.toString() -> ThreeByThree
+            TwoByTwo.toString() -> TwoByTwo
+            FourByFour.toString() -> FourByFour
+            Pyraminx.toString() -> Pyraminx
+            Clock.toString() -> Clock
+            SquareOne.toString() -> SquareOne
+            Skewb.toString() -> Skewb
+            Megaminx.toString() -> Megaminx
+            else -> null
+        }
     }
 }

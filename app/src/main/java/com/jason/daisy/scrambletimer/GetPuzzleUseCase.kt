@@ -3,7 +3,7 @@ package com.jason.daisy.scrambletimer
 import org.worldcubeassociation.tnoodle.puzzle.*
 
 class GetPuzzleUseCase {
-    fun execute(c : PuzzleType) = when(c) {
+    fun execute(puzzle : PuzzleType) = when(puzzle) {
             PuzzleType.TwoByTwo -> TwoByTwoCubePuzzle()
             PuzzleType.ThreeByThree -> ThreeByThreeCubePuzzle()
             PuzzleType.FourByFour -> FourByFourCubePuzzle()

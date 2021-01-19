@@ -6,7 +6,6 @@ import android.view.MotionEvent
 import android.view.View
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
-import android.widget.Spinner
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
@@ -36,9 +35,8 @@ class ScrambleTimerActivity : AppCompatActivity(), AdapterView.OnItemSelectedLis
             ScrambleTimerViewModel::class.java)
 
         //Update Spinner with puzzle types
-        vBinding.puzzleSpinner.adapter = ArrayAdapter<PuzzleType>(this, R.layout.support_simple_spinner_dropdown_item, PuzzleType.values())
-        TODO("Set on item selected listener to the spinner")
-        findViewById<Spinner>(R.id.puzzle_spinner)
+        vBinding.puzzleSpinner.adapter = ArrayAdapter(this, R.layout.support_simple_spinner_dropdown_item, PuzzleType.values())
+        vBinding.puzzleSpinner.onItemSelectedListener = this
 
         //Attach observers to livedata
         vm.currentTime.observe(this, { vBinding.timerTextView.text = it })
@@ -79,9 +77,10 @@ class ScrambleTimerActivity : AppCompatActivity(), AdapterView.OnItemSelectedLis
         startActivity(viewSolvesIntent)
     }
 
-    override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
-        val t = parent?.getItemAtPosition(position).toString()
-        Toast.makeText(parent?.context, t, Toast.LENGTH_SHORT).show()
+    override fun onItemSelected(parent: AdapterView<*>, view: View?, pos: Int, id: Long) {
+        val puzzleChosen = PuzzleType.getPuzzleType(parent.getItemAtPosition(pos).toString())
+        if(puzzleChosen != null) vm.changePuzzle(puzzleChosen)
+        else throw Exception("NO ITEM SELECTED")
     }
 
     override fun onNothingSelected(parent: AdapterView<*>?) {

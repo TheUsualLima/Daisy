@@ -2,16 +2,17 @@
 <com.jason.daisy.customviews.CustomConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".scrambletimer.ScrambleTimerActivity"
-    android:id="@+id/main_layout"
-    android:keepScreenOn="true"> <!--could do programmatically-->
+    android:keepScreenOn="true"
+    tools:context=".scrambletimer.ScrambleTimerActivity"> <!--could do programmatically-->
 
     <TextView
         android:id="@+id/timer_text_view"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginVertical="35sp"
         android:gravity="center"
         android:text="@string/timerInitText"
         android:textSize="60sp"
@@ -21,24 +22,24 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <Button
-        android:id="@+id/luna_button"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/loveButtonName"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/view_solves_button" />
-
-    <Button
         android:id="@+id/view_solves_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/viewSolveButtonName"
-        app:layout_constraintBottom_toTopOf="@+id/luna_button"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/timer_text_view" />
+        android:layout_marginVertical="10sp"
+        app:layout_constraintEnd_toStartOf="@+id/luna_button"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <Button
+        android:id="@+id/luna_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/loveButtonName"
+        android:layout_marginVertical="10sp"
+        app:layout_constraintStart_toEndOf="@+id/view_solves_button"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
 
     <TextView
         android:id="@+id/scramble_text_view"
@@ -48,21 +49,20 @@
         android:text="@string/scrambleDefault"
         android:textAlignment="center"
         android:textSize="24sp"
-        app:layout_constraintBottom_toTopOf="@+id/timer_text_view"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.12" />
+        app:layout_constraintTop_toBottomOf="@+id/puzzle_spinner" />
 
     <Spinner
         android:id="@+id/puzzle_spinner"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginVertical="10sp"
         android:entries="@android:array/emailAddressTypes"
+        android:textAlignment="center"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/scramble_text_view" />
+        app:layout_constraintTop_toTopOf="parent" />
 
 
 </com.jason.daisy.customviews.CustomConstraintLayout>

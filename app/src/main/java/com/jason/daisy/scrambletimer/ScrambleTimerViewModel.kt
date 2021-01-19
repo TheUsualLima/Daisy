@@ -53,6 +53,15 @@ class ScrambleTimerViewModel(application: Application) : AndroidViewModel(applic
         }
     }
 
+    fun changePuzzle(puzzleChosen: PuzzleType) {
+        val g = GetPuzzleUseCase().execute(puzzleChosen)
+        if(g::class != puzzle::class) {
+            puzzle = g
+            clearScrambleList()
+            updateScramble()
+        }
+    }
+
     private fun updateScramble() = viewModelScope.launch(Dispatchers.Default) {
         scrambles.remove(scramble.value)
         if(!scrambleUpdater.isActive) scrambleUpdater = updateScrambleList()
@@ -65,6 +74,8 @@ class ScrambleTimerViewModel(application: Application) : AndroidViewModel(applic
             scrambles.add(puzzle.generateScramble())
         }
     }
+
+    private fun clearScrambleList() { scrambles.clear() }
 
     private fun startTimer() {
         timeStart = LocalTime.now()
