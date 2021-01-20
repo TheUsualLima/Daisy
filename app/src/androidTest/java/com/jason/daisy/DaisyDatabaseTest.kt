@@ -7,6 +7,7 @@ import androidx.test.platform.app.InstrumentationRegistry
 import com.jason.daisy.database.DaisyDatabase
 import com.jason.daisy.database.Solve
 import com.jason.daisy.database.SolveDao
+import com.jason.daisy.scrambletimer.PuzzleType
 import junit.framework.Assert.assertTrue
 import kotlinx.coroutines.runBlocking
 import org.junit.After
@@ -45,8 +46,8 @@ class DaisyDatabaseTest {
     @Test
     @Throws(Exception::class)
     fun insertAndGetSolve() = runBlocking {
-        val solve = Solve("8.16", LocalDateTime.now().toString(), "")
-        val solve2 = Solve("13.37", LocalDateTime.now().toString(), "")
+        val solve = Solve(PuzzleType.ThreeByThree.puzzleName,"8.16", LocalDateTime.now().toString(), "")
+        val solve2 = Solve(PuzzleType.ThreeByThree.puzzleName, "13.37", LocalDateTime.now().toString(), "")
         solveDao.insertAll(solve, solve2)
         val allSolves = solveDao.getAll()
         val s = allSolves.contains(solve)

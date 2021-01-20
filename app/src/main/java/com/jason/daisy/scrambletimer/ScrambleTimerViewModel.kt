@@ -96,7 +96,14 @@ class ScrambleTimerViewModel(application: Application) : AndroidViewModel(applic
     }
 
     private fun saveTime() = viewModelScope.launch(Dispatchers.IO) {
-        db.solveDao.insertAll(Solve(timeStart.until(timeEnd, ChronoUnit.MILLIS).msToTimeString(), LocalDateTime.now().toString(), scramble.value ?: ""))
+        db.solveDao.insertAll(
+                Solve(
+                        GetPuzzleStringUseCase().execute(puzzle),
+                        timeStart.until(timeEnd, ChronoUnit.MILLIS).msToTimeString(),
+                        LocalDateTime.now().toString(),
+                        scramble.value ?: ""
+                )
+        )
     }
 
     private fun timerJob() = viewModelScope.launch(Dispatchers.Default) {

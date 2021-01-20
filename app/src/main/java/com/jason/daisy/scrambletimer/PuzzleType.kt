@@ -24,7 +24,7 @@ enum class PuzzleType(val puzzleName: String) {
             SquareOne.toString() -> SquareOne
             Skewb.toString() -> Skewb
             Megaminx.toString() -> Megaminx
-            else -> null
+            else -> throw Exception("String does not have a puzzle associated with it")
         }
     }
 }
