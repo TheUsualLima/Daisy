@@ -6,75 +6,117 @@ import org.junit.jupiter.api.Test
 internal class LongExtensionsKtTest {
 
     @Test
-    fun timeStringZero() {
+    fun zero() {
         Assertions.assertEquals("0.00", (0L).msToTimeString(), "Unexpected Result")
     }
 
     @Test
-    fun timeStringOneSecond() {
-        Assertions.assertEquals("1.00", (1000L).msToTimeString(), "Unexpected Result")
-    }
-
-    @Test
-    fun timeStringOneMinute() {
-        Assertions.assertEquals("1:00.00", (60000L).msToTimeString(), "Unexpected Result")
-    }
-
-    @Test
-    fun timeStringFiveMinutesArbitrary() {
-        Assertions.assertEquals("5:26.79", (326794L).msToTimeString(), "Unexpected Result")
-    }
-
-    @Test
-    fun timeStringOneMinuteOneSecond() {
-        Assertions.assertEquals("1:01.23", (61230L).msToTimeString(), "Unexpected Result")
-    }
-
-    @Test
-    fun timeString5MinutesHundredMilli() {
-        Assertions.assertEquals("5:00.10", (300100L).msToTimeString(), "Unexpected Result")
-    }
-
-    @Test
-    fun timeStringTenMillis() {
+    fun tenMs() {
         Assertions.assertEquals("0.01", (10L).msToTimeString(), "Unexpected Result")
     }
 
     @Test
-    fun timeStringTwentyMillis() {
+    fun twentyMs() {
         Assertions.assertEquals("0.02", (20L).msToTimeString(), "Unexpected Result")
     }
 
     @Test
-    fun timeUntilMinute() {
-        TODO("Rewrite tests")
-        for (i in 0 .. 60000) {
-            var tempString = i.toString()
-            tempString = tempString.padStart(4, '0')
-            tempString = "${tempString.substring(0 until tempString.length - 3)}.${tempString.substring(tempString.length - 3 until tempString.length - 1)}"
-            val ans = (i.toLong().msToTimeString())
-            if (i == 60000)
-                Assertions.assertEquals(
-                    "1:00.00",
-                    (i.toLong().msToTimeString()),
-                    "Unexpected Result"
-                )
-            else
-                Assertions.assertEquals(
-                    tempString,
-                    (i.toLong().msToTimeString()),
-                    "Unexpected Result"
-                )
-        }
+    fun hundredMs() {
+        Assertions.assertEquals("0.10", (100L).msToTimeString(), "Unexpected Result")
     }
 
     @Test
-    fun timeStringHourArbitrary() {
-        Assertions.assertEquals("1:46:13.08", (6373089L).msToTimeString(), "Unexpected Result")
+    fun hundredTenMs() {
+        Assertions.assertEquals("0.11", (110L).msToTimeString(), "Unexpected Result")
     }
 
     @Test
-    fun timeStringHourOneDigitMinute() {
-        Assertions.assertEquals("1:07:08.09", (4028090L).msToTimeString(), "Unexpected Result")
+    fun oneS() {
+        Assertions.assertEquals("1.00", (1_000L).msToTimeString(), "Unexpected Result")
+    }
+
+    @Test
+    fun oneSTenMs() {
+        Assertions.assertEquals("1.01", (1_010L).msToTimeString(), "Unexpected Result")
+    }
+
+    @Test
+    fun tenS() {
+        Assertions.assertEquals("10.00", (10_000L).msToTimeString(), "Unexpected Result")
+    }
+
+    @Test
+    fun tenSTenMs() {
+        Assertions.assertEquals("10.01", (10_010L).msToTimeString(), "Unexpected Result")
+    }
+
+    @Test
+    fun elevenSTenMs() {
+        Assertions.assertEquals("11.01", (11_010L).msToTimeString(), "Unexpected Result")
+    }
+
+    @Test
+    fun oneM() {
+        Assertions.assertEquals("1:00.00", (60_000L).msToTimeString(), "Unexpected Result")
+    }
+
+    @Test
+    fun oneMTenMs() {
+        Assertions.assertEquals("1:00.01", (60_010L).msToTimeString(), "Unexpected Result")
+    }
+
+    @Test
+    fun oneMOneS() {
+        Assertions.assertEquals("1:01.00", (61_000L).msToTimeString(), "Unexpected Result")
+    }
+
+    @Test
+    fun oneMOneSTenMs() {
+        Assertions.assertEquals("1:01.01", (61_010L).msToTimeString(), "Unexpected Result")
+    }
+
+    @Test
+    fun oneMTenSTenMs() {
+        Assertions.assertEquals("1:10.01", (70_010L).msToTimeString(), "Unexpected Result")
+    }
+
+    @Test
+    fun arbitraryMSMs() {
+        Assertions.assertEquals("5:26.79", (326_794L).msToTimeString(), "Unexpected Result")
+    }
+
+    @Test
+    fun oneH() {
+        Assertions.assertEquals("1:00:00.00", (3_600_000L).msToTimeString(), "Unexpected Result")
+    }
+
+    @Test
+    fun oneHTenMs() {
+        Assertions.assertEquals("1:00:00.01", (3_600_010L).msToTimeString(), "Unexpected Result")
+    }
+
+    @Test
+    fun oneHOneS() {
+        Assertions.assertEquals("1:00:01.00", (3_601_000L).msToTimeString(), "Unexpected Result")
+    }
+
+    @Test
+    fun oneHTenS() {
+        Assertions.assertEquals("1:00:10.00", (3_610_000L).msToTimeString(), "Unexpected Result")
+    }
+
+    @Test
+    fun oneHOneM() {
+        Assertions.assertEquals("1:01:00.00", (3_660_000L).msToTimeString(), "Unexpected Result")
+    }
+
+    @Test
+    fun oneHTenM() {
+        Assertions.assertEquals("1:10:00.00", (4_200_000L).msToTimeString(), "Unexpected Result")
+    }
+
+    @Test
+    fun oneHTenMOneSTenMs() {
+        Assertions.assertEquals("1:10:01.01", (4_201_010L).msToTimeString(), "Unexpected Result")
     }
 }
