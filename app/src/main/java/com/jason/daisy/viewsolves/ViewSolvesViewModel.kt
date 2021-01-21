@@ -9,12 +9,16 @@ import com.jason.daisy.database.Solve
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
-class ViewSolvesViewModel(application: Application) : ViewModel() {
+class ViewSolvesViewModel(application: Application, private val puzzleType: String) : ViewModel() {
     private val db = DaisyDatabase.getInstance(application.applicationContext)
     val data : MutableLiveData<List<Solve>> = MutableLiveData()
 
-    fun updateSolves() {
-        viewModelScope.launch(Dispatchers.IO) { data.postValue(db.solveDao.getAll().reversed()) }
+    init {
+        updateSolves()
+    }
+
+    private fun updateSolves() {
+        viewModelScope.launch(Dispatchers.IO) { data.postValue(db.solveDao.getAllOfPuzzleType(puzzleType).reversed()) }
     }
 
     fun deleteAll() {

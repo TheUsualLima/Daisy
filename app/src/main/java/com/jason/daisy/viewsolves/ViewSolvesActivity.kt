@@ -23,12 +23,16 @@ class ViewSolvesActivity : AppCompatActivity(), SolvesAdapterListener {
         super.onCreate(savedInstanceState)
         vBinding = ActivityViewSolvesBinding.inflate(layoutInflater)
         setContentView(vBinding.root)
-        vm = ViewModelProvider(this, ViewSolvesViewModelFactory(application)).get(ViewSolvesViewModel::class.java)
+        val pT = intent.extras?.getString("puzzleType")
+        if(pT != null) {
+            vm = ViewModelProvider(this, ViewSolvesViewModelFactory(application, pT)).get(ViewSolvesViewModel::class.java)
+        } else {
+            throw Exception("PuzzleType string not provided")
+        }
 
         vBinding.recyclerView.layoutManager = LinearLayoutManager(this)
         adapter = SolvesAdapter(this)
         vBinding.recyclerView.adapter = adapter
-        populateAdapter()
         vBinding.recyclerView.setHasFixedSize(true)
 
         vBinding.viewTimerButton.setOnClickListener { changeScreen() }
@@ -45,10 +49,7 @@ class ViewSolvesActivity : AppCompatActivity(), SolvesAdapterListener {
     private fun changeScreen() {
         val viewTimerIntent = Intent(this, ScrambleTimerActivity::class.java).apply {}
         startActivity(viewTimerIntent)
-    }
-
-    override fun populateAdapter() {
-        vm.updateSolves()
+        finish()
     }
 
     override fun deleteDialog(s: Solve) = lifecycleScope.launch {

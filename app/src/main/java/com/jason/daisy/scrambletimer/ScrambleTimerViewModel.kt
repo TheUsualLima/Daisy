@@ -20,12 +20,13 @@ import java.time.temporal.ChronoUnit
 
 class ScrambleTimerViewModel(application: Application) : AndroidViewModel(application) {
     private var scrambleUpdater : Job
-    private var puzzle : Puzzle = GetPuzzleUseCase().execute(GetDefaultPuzzleTypeUseCase().execute())
     private var _timerActive = MutableLiveData<Boolean>()
     private var timeStart : LocalTime = LocalTime.now()
     private var timeEnd : LocalTime = LocalTime.now()
     private val db = DaisyDatabase.getInstance(application.applicationContext)
     private val scrambles = mutableListOf<String>()
+    var puzzle : Puzzle = GetPuzzleUseCase().execute(GetDefaultPuzzleTypeUseCase().execute())
+        private set
     val timerActive: LiveData<Boolean> = _timerActive
     val currentTime : MutableLiveData<String> = MutableLiveData()
     val timerColor : MutableLiveData<Int> = MutableLiveData()

@@ -15,4 +15,7 @@ interface SolveDao {
 
     @Query("DELETE FROM solves")
     suspend fun deleteAll()
+
+    @Query("SELECT * FROM solves WHERE puzzle LIKE :pType")
+    suspend fun getAllOfPuzzleType(pType: String): List<Solve>
 }

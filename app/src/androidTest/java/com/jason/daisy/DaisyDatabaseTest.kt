@@ -8,6 +8,7 @@ import com.jason.daisy.database.DaisyDatabase
 import com.jason.daisy.database.Solve
 import com.jason.daisy.database.SolveDao
 import com.jason.daisy.scrambletimer.PuzzleType
+import junit.framework.Assert.assertEquals
 import junit.framework.Assert.assertTrue
 import kotlinx.coroutines.runBlocking
 import org.junit.After
@@ -53,5 +54,23 @@ class DaisyDatabaseTest {
         val s = allSolves.contains(solve)
         Log.d("DATABASE TEST", allSolves.toString())
         assertTrue(s)
+    }
+
+    @Test
+    @Throws(Exception::class)
+    fun getAllOfPuzzleType() = runBlocking {
+        val solve = Solve(PuzzleType.ThreeByThree.puzzleName,"8.16", LocalDateTime.now().toString(), "")
+        val solve2 = Solve(PuzzleType.FourByFour.puzzleName, "13.37", LocalDateTime.now().toString(), "")
+        val solve3 = Solve(PuzzleType.ThreeByThree.puzzleName, "9.99", LocalDateTime.now().toString(), "")
+        val solve4 = Solve(PuzzleType.Pyraminx.puzzleName, "5.52", LocalDateTime.now().toString(), "")
+        val solve5 = Solve(PuzzleType.ThreeByThree.puzzleName, "11.23", LocalDateTime.now().toString(), "")
+
+        val threeSolves = listOf(solve, solve3, solve5)
+
+        solveDao.insertAll(solve, solve2, solve3, solve4, solve5)
+
+        val solves = solveDao.getAllOfPuzzleType("Three by Three")
+
+        assertEquals(threeSolves, solves)
     }
 }

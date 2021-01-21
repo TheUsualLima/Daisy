@@ -5,5 +5,4 @@ import kotlinx.coroutines.Job
 
 interface SolvesAdapterListener {
     fun deleteDialog(s : Solve): Job
-    fun populateAdapter()
 }

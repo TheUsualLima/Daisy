@@ -74,13 +74,13 @@ class ScrambleTimerActivity : AppCompatActivity(), AdapterView.OnItemSelectedLis
 
     private fun changeScreen() {
         val viewSolvesIntent = Intent(this, ViewSolvesActivity::class.java).apply{}
+        viewSolvesIntent.putExtra("puzzleType", GetPuzzleStringUseCase().execute(vm.puzzle))
         startActivity(viewSolvesIntent)
     }
 
     override fun onItemSelected(parent: AdapterView<*>, view: View?, pos: Int, id: Long) {
         val puzzleChosen = PuzzleType.getPuzzleType(parent.getItemAtPosition(pos).toString())
-        if(puzzleChosen != null) vm.changePuzzle(puzzleChosen)
-        else throw Exception("NO ITEM SELECTED")
+        vm.changePuzzle(puzzleChosen)
     }
 
     override fun onNothingSelected(parent: AdapterView<*>?) {
