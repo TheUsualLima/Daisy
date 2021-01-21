@@ -20,17 +20,20 @@ import java.time.temporal.ChronoUnit
 
 class ScrambleTimerViewModel(application: Application) : AndroidViewModel(application) {
     private var scrambleUpdater : Job
-    private var _timerActive = MutableLiveData<Boolean>()
     private var timeStart : LocalTime = LocalTime.now()
     private var timeEnd : LocalTime = LocalTime.now()
     private val db = DaisyDatabase.getInstance(application.applicationContext)
     private val scrambles = mutableListOf<String>()
+    private var _timerActive = MutableLiveData<Boolean>()
+    private val _currentTime : MutableLiveData<String> = MutableLiveData()
+    private val _timerColor : MutableLiveData<Int> = MutableLiveData()
+    private val _scramble : MutableLiveData<String> = MutableLiveData()
+    val currentTime : LiveData<String> = _currentTime
+    val timerColor : LiveData<Int> = _timerColor
+    val scramble : LiveData<String> = _scramble
+    val timerActive: LiveData<Boolean> = _timerActive
     var puzzle : Puzzle = GetPuzzleUseCase().execute(GetDefaultPuzzleTypeUseCase().execute())
         private set
-    val timerActive: LiveData<Boolean> = _timerActive
-    val currentTime : MutableLiveData<String> = MutableLiveData()
-    val timerColor : MutableLiveData<Int> = MutableLiveData()
-    val scramble : MutableLiveData<String> = MutableLiveData()
 
     init {
         _timerActive.value = false
@@ -49,25 +52,25 @@ class ScrambleTimerViewModel(application: Application) : AndroidViewModel(applic
     fun handleActionDown() : Boolean {
         return if (stopIfStarted()) true
         else {
-            timerColor.postValue(Color.GREEN)
+            _timerColor.postValue(Color.GREEN)
             false
         }
     }
 
     fun changePuzzle(puzzleChosen: PuzzleType) {
-        val g = GetPuzzleUseCase().execute(puzzleChosen)
-        if(g::class != puzzle::class) {
-            puzzle = g
+        val puzzle = GetPuzzleUseCase().execute(puzzleChosen)
+        if(puzzle::class != this.puzzle::class) {
+            this.puzzle = puzzle
             clearScrambleList()
             updateScramble()
         }
     }
 
     private fun updateScramble() = viewModelScope.launch(Dispatchers.Default) {
-        scrambles.remove(scramble.value)
+        scrambles.remove(_scramble.value)
         if(!scrambleUpdater.isActive) scrambleUpdater = updateScrambleList()
-        if(scrambles.isEmpty()) scramble.postValue(puzzle.generateScramble())
-        else scramble.postValue(scrambles[0])
+        if(scrambles.isEmpty()) _scramble.postValue(puzzle.generateScramble())
+        else _scramble.postValue(scrambles[0])
     }
 
     private fun updateScrambleList() = viewModelScope.launch(Dispatchers.Default) {
@@ -81,7 +84,7 @@ class ScrambleTimerViewModel(application: Application) : AndroidViewModel(applic
     private fun startTimer() {
         timeStart = LocalTime.now()
         _timerActive.value = true
-        timerColor.postValue(Color.MAGENTA)
+        _timerColor.postValue(Color.MAGENTA)
         timerJob()
     }
 
@@ -102,7 +105,7 @@ class ScrambleTimerViewModel(application: Application) : AndroidViewModel(applic
                         GetPuzzleStringUseCase().execute(puzzle),
                         timeStart.until(timeEnd, ChronoUnit.MILLIS).msToTimeString(),
                         LocalDateTime.now().toString(),
-                        scramble.value ?: ""
+                        _scramble.value ?: ""
                 )
         )
     }
@@ -110,9 +113,9 @@ class ScrambleTimerViewModel(application: Application) : AndroidViewModel(applic
     private fun timerJob() = viewModelScope.launch(Dispatchers.Default) {
         while (_timerActive.value == true) {
             delay(10L)
-            currentTime.postValue(timeStart.until(LocalTime.now(), ChronoUnit.MILLIS).msToTimeString())
+            _currentTime.postValue(timeStart.until(LocalTime.now(), ChronoUnit.MILLIS).msToTimeString())
         }
-        currentTime.postValue(timeStart.until(timeEnd, ChronoUnit.MILLIS).msToTimeString())
-        timerColor.postValue(Color.BLACK)
+        _currentTime.postValue(timeStart.until(timeEnd, ChronoUnit.MILLIS).msToTimeString())
+        _timerColor.postValue(Color.BLACK)
     }
 }
