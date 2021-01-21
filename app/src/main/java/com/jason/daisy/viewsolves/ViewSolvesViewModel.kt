@@ -12,6 +12,7 @@ import kotlinx.coroutines.launch
 
 class ViewSolvesViewModel(application: Application, private val puzzleType: String) : ViewModel() {
     private val db = DaisyDatabase.getInstance(application.applicationContext)
+
     private val _data : MutableLiveData<List<Solve>> = MutableLiveData()
     val data : LiveData<List<Solve>> = _data
 

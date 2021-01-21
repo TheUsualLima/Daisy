@@ -24,14 +24,19 @@ class ScrambleTimerViewModel(application: Application) : AndroidViewModel(applic
     private var timeEnd : LocalTime = LocalTime.now()
     private val db = DaisyDatabase.getInstance(application.applicationContext)
     private val scrambles = mutableListOf<String>()
+
     private var _timerActive = MutableLiveData<Boolean>()
-    private val _currentTime : MutableLiveData<String> = MutableLiveData()
-    private val _timerColor : MutableLiveData<Int> = MutableLiveData()
-    private val _scramble : MutableLiveData<String> = MutableLiveData()
-    val currentTime : LiveData<String> = _currentTime
-    val timerColor : LiveData<Int> = _timerColor
-    val scramble : LiveData<String> = _scramble
     val timerActive: LiveData<Boolean> = _timerActive
+
+    private val _currentTime : MutableLiveData<String> = MutableLiveData()
+    val currentTime : LiveData<String> = _currentTime
+
+    private val _timerColor : MutableLiveData<Int> = MutableLiveData()
+    val timerColor : LiveData<Int> = _timerColor
+
+    private val _scramble : MutableLiveData<String> = MutableLiveData()
+    val scramble : LiveData<String> = _scramble
+
     var puzzle : Puzzle = GetPuzzleUseCase().execute(GetDefaultPuzzleTypeUseCase().execute())
         private set
 
