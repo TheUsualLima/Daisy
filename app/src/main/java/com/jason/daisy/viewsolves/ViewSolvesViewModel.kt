@@ -1,6 +1,7 @@
 package com.jason.daisy.viewsolves
 
 import android.app.Application
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -11,14 +12,16 @@ import kotlinx.coroutines.launch
 
 class ViewSolvesViewModel(application: Application, private val puzzleType: String) : ViewModel() {
     private val db = DaisyDatabase.getInstance(application.applicationContext)
-    val data : MutableLiveData<List<Solve>> = MutableLiveData()
+    private val _data : MutableLiveData<List<Solve>> = MutableLiveData()
+    val data : LiveData<List<Solve>> = _data
+
 
     init {
         updateSolves()
     }
 
     private fun updateSolves() {
-        viewModelScope.launch(Dispatchers.IO) { data.postValue(db.solveDao.getAllOfPuzzleType(puzzleType).reversed()) }
+        viewModelScope.launch(Dispatchers.IO) { _data.postValue(db.solveDao.getAllOfPuzzleType(puzzleType).reversed()) }
     }
 
     fun deleteAll() {
