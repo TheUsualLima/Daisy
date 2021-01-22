@@ -18,11 +18,13 @@ class ViewSolvesViewModel(application: Application, private val puzzleType: Stri
 
 
     init {
-        updateSolves()
+        viewModelScope.launch(Dispatchers.IO) {
+            updateSolves()
+        }
     }
 
-    private fun updateSolves() {
-        viewModelScope.launch(Dispatchers.IO) { _data.postValue(db.solveDao.getAllOfPuzzleType(puzzleType).reversed()) }
+    private suspend fun updateSolves() {
+        _data.postValue(db.solveDao.getAllOfPuzzleType(puzzleType).reversed())
     }
 
     fun deleteAll() {

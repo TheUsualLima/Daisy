@@ -23,9 +23,9 @@ class ViewSolvesActivity : AppCompatActivity(), SolvesAdapterListener {
         super.onCreate(savedInstanceState)
         vBinding = ActivityViewSolvesBinding.inflate(layoutInflater)
         setContentView(vBinding.root)
-        val pT = intent.extras?.getString("puzzleType")
-        if(pT != null) {
-            vm = ViewModelProvider(this, ViewSolvesViewModelFactory(application, pT)).get(ViewSolvesViewModel::class.java)
+        val puzzleTypeString = intent.extras?.getString("puzzleType")
+        if(puzzleTypeString != null) {
+            vm = ViewModelProvider(this, ViewSolvesViewModelFactory(application, puzzleTypeString)).get(ViewSolvesViewModel::class.java)
         } else {
             throw Exception("PuzzleType string not provided")
         }
@@ -53,7 +53,7 @@ class ViewSolvesActivity : AppCompatActivity(), SolvesAdapterListener {
     }
 
     override fun deleteDialog(s: Solve) = lifecycleScope.launch {
-        showDeleteDialog(s)
+        vm.delete(s)
     }
 
     private fun showDeleteAllDialog() {
@@ -65,24 +65,6 @@ class ViewSolvesActivity : AppCompatActivity(), SolvesAdapterListener {
             when (which) {
                 DialogInterface.BUTTON_POSITIVE -> { vm.deleteAll() }
                 else -> Log.d("DELETEALLSOLVES", "CANCELLED")
-            }
-        }
-        builder.setPositiveButton("YES", dialogClickListener)
-        builder.setNegativeButton("NO", dialogClickListener)
-
-        dialog = builder.create()
-        dialog.show()
-    }
-
-    private fun showDeleteDialog(currentItem: Solve) {
-        lateinit var dialog: AlertDialog
-        val builder = AlertDialog.Builder(this)
-        builder.setTitle("Delete Solve")
-        builder.setMessage("Are you sure you want to delete this solve?")
-        val dialogClickListener = DialogInterface.OnClickListener { _, which ->
-            when (which) {
-                DialogInterface.BUTTON_POSITIVE -> { vm.delete(currentItem) }
-                else -> Log.d("DELETESOLVE", "CANCELLED")
             }
         }
         builder.setPositiveButton("YES", dialogClickListener)
