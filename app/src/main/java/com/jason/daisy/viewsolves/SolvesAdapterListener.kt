@@ -4,5 +4,5 @@ import com.jason.daisy.database.Solve
 import kotlinx.coroutines.Job
 
 interface SolvesAdapterListener {
-    fun deleteDialog(s : Solve): Job
+    fun deleteSolve(s: Solve)
 }

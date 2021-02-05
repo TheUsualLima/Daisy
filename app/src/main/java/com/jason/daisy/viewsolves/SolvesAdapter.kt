@@ -18,6 +18,11 @@ class SolvesAdapter(private val listener: SolvesAdapterListener) : ListAdapter<S
         return SolvesViewHolder(itemBinding, listener)
     }
 
+    fun deleteItem(pos: Int) {
+        val deletedItem = getItem(pos)
+        listener.deleteSolve(deletedItem)
+    }
+
     class SolvesViewHolder(private val itemBinding: SolveItemBinding, private val listener: SolvesAdapterListener) : RecyclerView.ViewHolder(itemBinding.root) {
         fun bind(currentItem: Solve) {
             itemBinding.apply {
@@ -25,10 +30,6 @@ class SolvesAdapter(private val listener: SolvesAdapterListener) : ListAdapter<S
                 val s = "Date: ${currentItem.dateOfSolve.substring(0..9)} Time: ${currentItem.dateOfSolve.substring(11 until currentItem.dateOfSolve.length - 1)}"
                 textView2.text = s
                 scrambleTextView.text = currentItem.scramble
-                deleteSolveButton.setOnClickListener {
-                    //Interface to call a function in the activity from adapter
-                    listener.deleteDialog(currentItem)
-                }
             }
         }
     }

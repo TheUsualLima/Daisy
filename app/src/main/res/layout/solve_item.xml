@@ -32,7 +32,6 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_toEndOf="@id/text_view_1"
-            android:layout_toStartOf="@id/delete_solve_button"
             android:paddingStart="10sp"
             android:text="R2 D2 R2 D2 R2 D2 R2 D2 R2 D2 R2 D2 R2 D2 R2 D2 R2 D2"/>
 
@@ -43,16 +42,6 @@
             android:layout_below="@id/scramble_text_view"
             android:layout_toEndOf="@id/image_view"
             android:text="Line 2" />
-
-        <ImageButton
-            android:id="@+id/delete_solve_button"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:contentDescription="Delete Solve Icon"
-            android:layout_alignParentEnd="true"
-            app:srcCompat="@drawable/ic_delete" />
-
-
     </RelativeLayout>
 
 </androidx.cardview.widget.CardView>
