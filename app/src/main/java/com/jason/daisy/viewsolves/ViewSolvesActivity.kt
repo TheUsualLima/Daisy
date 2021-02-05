@@ -7,12 +7,11 @@ import android.os.Bundle
 import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.lifecycleScope
+import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.jason.daisy.database.Solve
 import com.jason.daisy.databinding.ActivityViewSolvesBinding
 import com.jason.daisy.scrambletimer.ScrambleTimerActivity
-import kotlinx.coroutines.launch
 
 class ViewSolvesActivity : AppCompatActivity(), SolvesAdapterListener {
     private lateinit var vBinding: ActivityViewSolvesBinding
@@ -23,27 +22,28 @@ class ViewSolvesActivity : AppCompatActivity(), SolvesAdapterListener {
         super.onCreate(savedInstanceState)
         vBinding = ActivityViewSolvesBinding.inflate(layoutInflater)
         setContentView(vBinding.root)
+
         val puzzleTypeString = intent.extras?.getString("puzzleType")
         if(puzzleTypeString != null) {
             vm = ViewModelProvider(this, ViewSolvesViewModelFactory(application, puzzleTypeString)).get(ViewSolvesViewModel::class.java)
         } else {
             throw Exception("PuzzleType string not provided")
         }
+        setUpRecycler()
+        vBinding.viewTimerButton.setOnClickListener { changeScreen() }
+        vBinding.deleteAllButton.setOnClickListener { showDeleteAllDialog() }
 
+        vm.data.observe(this, { adapter.submitList(it) })
+    }
+
+    private fun setUpRecycler() {
         vBinding.recyclerView.layoutManager = LinearLayoutManager(this)
         adapter = SolvesAdapter(this)
         vBinding.recyclerView.adapter = adapter
         vBinding.recyclerView.setHasFixedSize(true)
 
-        vBinding.viewTimerButton.setOnClickListener { changeScreen() }
-        vBinding.deleteAllButton.setOnClickListener { showDeleteAllDialog() }
-
-        vm.data.observe(this,
-                {
-                    adapter.submitList(it)
-                    adapter.notifyDataSetChanged()
-                }
-        )
+        val itemTouchHelper = ItemTouchHelper(SwipeToDeleteCallback(adapter))
+        itemTouchHelper.attachToRecyclerView(vBinding.recyclerView)
     }
 
     private fun changeScreen() {
@@ -52,7 +52,7 @@ class ViewSolvesActivity : AppCompatActivity(), SolvesAdapterListener {
         finish()
     }
 
-    override fun deleteDialog(s: Solve) = lifecycleScope.launch {
+    override fun deleteSolve(s: Solve) {
         vm.delete(s)
     }
 
@@ -63,7 +63,9 @@ class ViewSolvesActivity : AppCompatActivity(), SolvesAdapterListener {
         builder.setMessage("This action will delete all solves. Continue?")
         val dialogClickListener = DialogInterface.OnClickListener { _, which ->
             when (which) {
-                DialogInterface.BUTTON_POSITIVE -> { vm.deleteAll() }
+                DialogInterface.BUTTON_POSITIVE -> {
+                    vm.deleteAll()
+                }
                 else -> Log.d("DELETEALLSOLVES", "CANCELLED")
             }
         }
