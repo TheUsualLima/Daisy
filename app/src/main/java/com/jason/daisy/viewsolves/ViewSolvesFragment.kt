@@ -26,7 +26,7 @@ class ViewSolvesFragment : Fragment(), SolvesAdapterListener {
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         super.onCreate(savedInstanceState)
         _binding = FragmentViewSolvesBinding.inflate(layoutInflater, container, false)
         return binding.root

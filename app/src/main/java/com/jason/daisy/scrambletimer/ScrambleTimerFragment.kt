@@ -29,7 +29,7 @@ class ScrambleTimerFragment : Fragment(), AdapterView.OnItemSelectedListener {
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         _binding = FragmentScrambleTimerBinding.inflate(layoutInflater, container, false)
         return binding.root
     }
