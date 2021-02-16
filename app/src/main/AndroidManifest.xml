@@ -9,16 +9,19 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.Daisy">
-        <activity android:name=".viewsolves.ViewSolvesActivity"
-            android:launchMode="singleTask"
-            />
-        <activity android:name=".scrambletimer.ScrambleTimerActivity"
-            android:launchMode="singleTask">
+        <activity android:name=".MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+        </activity>
+        <activity
+            android:name=".viewsolves.ViewSolvesFragment"
+            android:launchMode="singleTask" />
+        <activity
+            android:name=".scrambletimer.ScrambleTimerFragment"
+            android:launchMode="singleTask">
         </activity>
     </application>
 
