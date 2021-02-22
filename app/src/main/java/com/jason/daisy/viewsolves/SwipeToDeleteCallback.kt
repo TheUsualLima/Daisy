@@ -1,6 +1,5 @@
 package com.jason.daisy.viewsolves
 
-import android.widget.Adapter
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.RecyclerView
 
