@@ -1,19 +1,24 @@
 package com.jason.daisy.viewsolves
 
 import android.app.AlertDialog
+import android.content.Context
 import android.content.DialogInterface
+import android.content.SharedPreferences
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.jason.daisy.database.Solve
 import com.jason.daisy.databinding.FragmentViewSolvesBinding
+import com.jason.daisy.scrambletimer.GetDefaultPuzzleTypeUseCase
+import com.jason.daisy.scrambletimer.PuzzleType
 
 class ViewSolvesFragment : Fragment(), SolvesAdapterListener {
     private var _binding: FragmentViewSolvesBinding? = null
@@ -21,6 +26,7 @@ class ViewSolvesFragment : Fragment(), SolvesAdapterListener {
         get() = requireNotNull(_binding)
     private lateinit var viewModel: ViewSolvesViewModel
     private lateinit var adapter: SolvesAdapter
+    private lateinit var sharedPreference: SharedPreferences
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -35,16 +41,21 @@ class ViewSolvesFragment : Fragment(), SolvesAdapterListener {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val puzzleTypeString = "Three by Three"
-        viewModel = ViewModelProvider(this, ViewSolvesViewModelFactory(requireActivity().application, puzzleTypeString)).get(ViewSolvesViewModel::class.java)
-        setUpRecycler()
-        binding.viewTimerButton.setOnClickListener { changeScreen() }
-        binding.deleteAllButton.setOnClickListener { showDeleteAllDialog() }
+        sharedPreference = requireActivity().getSharedPreferences("Puzzle_Preferences", Context.MODE_PRIVATE)
+        viewModel = ViewModelProvider(
+                this,
+                ViewSolvesViewModelFactory(
+                        requireActivity().application,
+                        sharedPreference.getString("SelectedPuzzle", PuzzleType.ThreeByThree.toString()) ?: "Three by Three")
+        ).get(ViewSolvesViewModel::class.java)
+
+        setRecycler()
+        setListeners()
 
         viewModel.data.observe(viewLifecycleOwner, { adapter.submitList(it) })
     }
 
-    private fun setUpRecycler() {
+    private fun setRecycler() {
         binding.recyclerView.layoutManager = LinearLayoutManager(requireContext())
         adapter = SolvesAdapter(this)
         binding.recyclerView.adapter = adapter
@@ -52,6 +63,11 @@ class ViewSolvesFragment : Fragment(), SolvesAdapterListener {
 
         val itemTouchHelper = ItemTouchHelper(SwipeToDeleteCallback(adapter))
         itemTouchHelper.attachToRecyclerView(binding.recyclerView)
+    }
+
+    private fun setListeners() {
+        binding.viewTimerButton.setOnClickListener { changeScreen() }
+        binding.deleteAllButton.setOnClickListener { showDeleteAllDialog() }
     }
 
     private fun changeScreen() {

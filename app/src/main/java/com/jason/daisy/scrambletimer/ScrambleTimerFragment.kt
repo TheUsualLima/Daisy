@@ -1,5 +1,7 @@
 package com.jason.daisy.scrambletimer
 
+import android.content.Context
+import android.content.SharedPreferences
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.MotionEvent
@@ -9,17 +11,19 @@ import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.Toast
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.ViewModelProvider
+import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import com.jason.daisy.R
 import com.jason.daisy.databinding.FragmentScrambleTimerBinding
 
 class ScrambleTimerFragment : Fragment(), AdapterView.OnItemSelectedListener {
     private var _binding: FragmentScrambleTimerBinding? = null
+   // private val sharedPreference = requireActivity().getSharedPreferences("Puzzle_Preferences", Context.MODE_PRIVATE)
     private val binding: FragmentScrambleTimerBinding
         get() = requireNotNull(_binding)
-    private lateinit var viewModel : ScrambleTimerViewModel
+    private val viewModel : ScrambleTimerViewModel by viewModels { ScrambleTimerViewModelFactory(requireActivity().application) }
     private lateinit var hiddenElements : List<View>
+    private lateinit var sharedPreference: SharedPreferences
 
     companion object {
         fun newInstance() = ScrambleTimerFragment()
@@ -44,21 +48,38 @@ class ScrambleTimerFragment : Fragment(), AdapterView.OnItemSelectedListener {
             binding.scrambleTextView
         )
 
-        //Get ViewModel reference
-        viewModel = ViewModelProvider(this, ScrambleTimerViewModelFactory(requireActivity().application)).get(
-            ScrambleTimerViewModel::class.java)
+        sharedPreference = requireActivity().getSharedPreferences("Puzzle_Preferences", Context.MODE_PRIVATE)
 
-        //Update Spinner with puzzle types
-        binding.puzzleSpinner.adapter = ArrayAdapter(requireActivity(), R.layout.support_simple_spinner_dropdown_item, PuzzleType.values())
+        setSpinner()
+        setObservers()
+        setListeners()
+    }
+
+    private fun setSpinner() {
+        val arrayAdapter = ArrayAdapter(requireActivity(), R.layout.support_simple_spinner_dropdown_item, PuzzleType.values())
+        binding.puzzleSpinner.adapter = arrayAdapter
         binding.puzzleSpinner.onItemSelectedListener = this
+        val puzzleString = sharedPreference.getString("SelectedPuzzle", PuzzleType.ThreeByThree.toString()) ?: "Three by Three"
+        val previousPuzzleSelection = arrayAdapter.getPosition(
+                PuzzleType.getPuzzleType(puzzleString)
+        )
+        binding.puzzleSpinner.setSelection(previousPuzzleSelection)
+    }
 
-        //Attach observers to livedata
+    private fun setObservers() {
         viewModel.currentTime.observe(requireActivity(), { binding.timerTextView.text = it })
         viewModel.timerColor.observe(requireActivity(), { binding.timerTextView.setTextColor(it) })
         viewModel.scramble.observe(requireActivity(), { binding.scrambleTextView.text = it })
         viewModel.timerActive.observe(requireActivity(), { setElementsVisibility(hiddenElements, !it) })
+    }
 
-        //Listener setup
+    private fun setElementsVisibility(list: List<View>, setVisible: Boolean) {
+        for(e in list) {
+            e.visibility = if(setVisible) View.VISIBLE else View.INVISIBLE
+        }
+    }
+
+    private fun setListeners() {
         binding.lunaButton.setOnClickListener {
             Toast.makeText(binding.lunaButton.context, "I Love you, Luna", Toast.LENGTH_SHORT).show()
         }
@@ -80,12 +101,6 @@ class ScrambleTimerFragment : Fragment(), AdapterView.OnItemSelectedListener {
         }
     }
 
-    private fun setElementsVisibility(list: List<View>, setVisible: Boolean) {
-        for(e in list) {
-            e.visibility = if(setVisible) View.VISIBLE else View.INVISIBLE
-        }
-    }
-
     private fun changeScreen() {
         val action = ScrambleTimerFragmentDirections.actionScrambleTimerFragmentToViewSolvesFragment()
         findNavController().navigate(action)
@@ -93,7 +108,11 @@ class ScrambleTimerFragment : Fragment(), AdapterView.OnItemSelectedListener {
 
     override fun onItemSelected(parent: AdapterView<*>, view: View?, pos: Int, id: Long) {
         val puzzleChosen = PuzzleType.getPuzzleType(parent.getItemAtPosition(pos).toString())
-        viewModel.changePuzzle(puzzleChosen)
+        viewModel.selectPuzzle(puzzleChosen)
+
+        val editor = sharedPreference.edit()
+        editor.putString("SelectedPuzzle", parent.getItemAtPosition(pos).toString())
+        editor.apply()
     }
 
     override fun onNothingSelected(parent: AdapterView<*>?) {

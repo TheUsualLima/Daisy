@@ -1,17 +1,14 @@
 package com.jason.daisy.viewsolves
 
 import android.app.Application
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
+import androidx.lifecycle.*
 import com.jason.daisy.database.DaisyDatabase
 import com.jason.daisy.database.Solve
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
-class ViewSolvesViewModel(application: Application, private val puzzleType: String) : ViewModel() {
-    private val db = DaisyDatabase.getInstance(application.applicationContext)
+class ViewSolvesViewModel(application: Application, private val puzzleType: String) : AndroidViewModel(application) {
+    private val db = DaisyDatabase.getInstance(getApplication<Application>().applicationContext)
 
     private val _data : MutableLiveData<List<Solve>> = MutableLiveData()
     val data : LiveData<List<Solve>> = _data

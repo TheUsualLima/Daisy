@@ -9,10 +9,7 @@ import androidx.lifecycle.viewModelScope
 import com.jason.daisy.common.msToTimeString
 import com.jason.daisy.database.DaisyDatabase
 import com.jason.daisy.database.Solve
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.Job
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.*
 import org.worldcubeassociation.tnoodle.scrambles.Puzzle
 import java.time.LocalDateTime
 import java.time.LocalTime
@@ -23,7 +20,7 @@ class ScrambleTimerViewModel(application: Application) : AndroidViewModel(applic
     private var timeStart : LocalTime = LocalTime.now()
     private var timeEnd : LocalTime = LocalTime.now()
     private var lastScramble : String = ""
-    private val db = DaisyDatabase.getInstance(application.applicationContext)
+    private val db = DaisyDatabase.getInstance(getApplication<Application>().applicationContext)
     private val scrambles = mutableListOf<String>()
 
     //LiveData
@@ -44,8 +41,7 @@ class ScrambleTimerViewModel(application: Application) : AndroidViewModel(applic
 
     init {
         _timerActive.value = false
-        scrambleUpdater = updateScrambleList()
-        updateScramble()
+        scrambleUpdater = Job()
     }
 
     fun handleActionUp() : Boolean {
@@ -64,10 +60,11 @@ class ScrambleTimerViewModel(application: Application) : AndroidViewModel(applic
         }
     }
 
-    fun changePuzzle(puzzleChosen: PuzzleType) {
+    fun selectPuzzle(puzzleChosen: PuzzleType) {
         val puzzle = GetPuzzleUseCase().execute(puzzleChosen)
-        if(puzzle::class != this.puzzle::class) {
+        if(puzzle::class != this.puzzle::class || _scramble.value == null) {
             this.puzzle = puzzle
+            scrambleUpdater.cancel()
             clearScrambleList()
             updateScramble()
         }
